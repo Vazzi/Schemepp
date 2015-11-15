@@ -21,6 +21,6 @@ struct Instruction {
         : opCode(opCode), arg(arg) {}
     unsigned int opCode;
     unsigned int arg;
-}
+};
 
 #endif
