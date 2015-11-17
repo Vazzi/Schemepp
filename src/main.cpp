@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Deserialization.hpp"
+#include "DeserializationError.hpp"
 
 using std::string;
 using std::cerr;

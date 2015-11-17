@@ -1,5 +1,6 @@
 #include "Deserialization.hpp"
 #include "BytecodeStream.hpp"
+#include "DeserializationError.hpp"
 
 const unsigned INIT_WORD = 0x00010B0B;
 

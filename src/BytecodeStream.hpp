@@ -10,7 +10,8 @@ class BytecodeStream {
         BytecodeStream(const char* fileName);
         ~BytecodeStream();
 
-        unsigned int readWord() { return 0; }
+        unsigned int readByte();
+        unsigned int readWord();
 
     private:
         FILE* stream;
