@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "Deserialization.hpp"
+
 using std::string;
 using std::cerr;
 
@@ -14,9 +16,10 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        // TODO: Deserialize bytecode
-    } catch (...) {
-        cerr << "Deserialization error: " << "\n";
+        Deserialization::deserializeByteCode(fileName);
+        // TODO: Save deserialized code
+    } catch (DeserializationError& err) {
+        cerr << "Deserialization error: " << err.what() << "\n";
         return 1;
     }
 
