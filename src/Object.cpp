@@ -7,15 +7,18 @@
 
 #include "Object.hpp"
 #include <typeinfo>
-
+#include <string>
 Object::Object(){}
 
 Object::Object(const Object& orig) {}
 
 Object::~Object() {}
+std::string Object::print(){
+    return "OBJECT";
+}
 
 bool Object::equalsTo(const Object & object) const {
-    
+    return false;
 }
 
 bool equalObjects(const Object *first,const  Object *second){
