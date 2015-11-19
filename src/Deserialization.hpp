@@ -4,6 +4,7 @@
 #include <string>
 
 class BytecodeStream;
+class Object;
 struct Instruction;
 
 using std::string;
@@ -22,12 +23,23 @@ enum serializableType_t {
 
 class Deserialization {
     public:
-        static void deserializeByteCode(const string& fileName);
+        Deserialization();
+        ~Deserialization();
+
+        void deserializeByteCode(const string& fileName);
 
     private:
-        static void nextByteMatchType(BytecodeStream& stream,
-                const serializableType_t& type);
-        static Instruction readInstruction(BytecodeStream& stream);
+
+        BytecodeStream* m_stream;
+
+        void nextByteMatchType(const serializableType_t& type);
+        Instruction readInstruction();
+        //Object* readNull();
+        //Object* readBoolean();
+        //Object* readSymbol();
+        //Object* readNumber();
+        //Object* readPair();
+        //Object* readSequence();
 };
 
 #endif

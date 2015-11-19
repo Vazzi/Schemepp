@@ -17,7 +17,9 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        Deserialization::deserializeByteCode(fileName);
+        Deserialization* des = new Deserialization();
+        des->deserializeByteCode(fileName);
+        delete des;
         // TODO: Save deserialized code
     } catch (DeserializationError& err) {
         cerr << "Deserialization error: " << err.what() << "\n";
