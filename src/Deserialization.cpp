@@ -1,5 +1,6 @@
 #include "Deserialization.hpp"
 #include "BytecodeStream.hpp"
+#include "Bytecode.hpp"
 #include "DeserializationError.hpp"
 #include <cstdio>
 
@@ -30,4 +31,11 @@ void Deserialization::nextByteMatchType(BytecodeStream& stream,
         string text = string(err);
         throw DeserializationError(text);
     }
+}
+
+Instruction Deserialization::readInstruction(BytecodeStream& stream) {
+    nextByteMatchType(stream, Instr);
+    unsigned int wordData = stream.readWord();
+    Instruction inst = Instruction(wordData >> 24, wordData & 0xFFFFFF);
+    return inst;
 }

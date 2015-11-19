@@ -4,6 +4,7 @@
 #include <string>
 
 class BytecodeStream;
+struct Instruction;
 
 using std::string;
 
@@ -26,6 +27,7 @@ class Deserialization {
     private:
         static void nextByteMatchType(BytecodeStream& stream,
                 const serializableType_t& type);
+        static Instruction readInstruction(BytecodeStream& stream);
 };
 
 #endif
