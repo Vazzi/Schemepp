@@ -1,21 +1,21 @@
-/* 
- * File:   Null.cpp
- * Author: Vojta
- * 
- * Created on 20. listopadu 2015, 10:07
- */
-
 #include "Null.hpp"
 #include <typeinfo>
 
+Null::Null() {
+    // epmty
+}
 
-Null::Null(){}
-Null::~Null(){}
-string Null::print(){
+Null::~Null() {
+    // empty
+}
+
+string Null::print() const {
     return "()";
 }
-bool Null::equalsTo(const BasicObject& basicObject)const{
-    if (typeid(*this).name() != typeid(basicObject).name()) return false;
-    return true; // vzdy nastane situace: null==null a to je true 
 
+bool Null::equalsTo(const BasicObject& basicObject) const {
+    if (typeid(*this).name() != typeid(basicObject).name()) {
+        return false;
+    }
+    return true; // vzdy nastane situace: null==null a to je true
 }

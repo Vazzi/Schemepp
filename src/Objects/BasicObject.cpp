@@ -1,22 +1,20 @@
-/* 
- * File:   BasicObject.cpp
- * Author: Vojta
- * 
- * Created on 20. listopadu 2015, 10:01
- */
-
 #include "BasicObject.hpp"
 #include <typeinfo>
 #include <iostream>
 
+BasicObject::BasicObject() {
+    // empty
+}
 
-BasicObject::BasicObject(){}
+BasicObject::BasicObject(const BasicObject& orig) {
+    // empty
+}
 
-BasicObject::BasicObject(const BasicObject& orig) {}
+BasicObject::~BasicObject() {
 
-BasicObject::~BasicObject() {}
+}
 
-std::string BasicObject::print(){
+string BasicObject::print() const {
     return "#OBJECT#";
 }
 
@@ -25,8 +23,11 @@ bool BasicObject::equalsTo(const BasicObject & basicObject) const {
 }
 
 bool equalObjects(const BasicObject *first,const  BasicObject *second){
-    if(first==second) return true;
-    else if (typeid(*first) != typeid(*second)) return false;
-    else return first->equalsTo(*second);
-     
+    if (first == second) {
+        return true;
+    } else if (typeid(*first) != typeid(*second)) {
+        return false;
+    } else {
+        return first->equalsTo(*second);
+    }
 }

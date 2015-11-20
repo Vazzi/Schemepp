@@ -1,18 +1,12 @@
-/* 
- * File:   Pair.h
- * Author: Vojta
- *
- * Created on 20. listopadu 2015, 10:12
- */
+#ifndef __PAIR_HPP__
+#define __PAIR_HPP__
 
-#ifndef PAIR_H
-#define	PAIR_H
 #include "BasicObject.hpp"
 #include <string>
 
 using std::string;
 
-class Pair:public BasicObject{
+class Pair : public BasicObject{
     public:
         Pair(BasicObject *first, BasicObject *second);
         ~Pair();
@@ -20,13 +14,13 @@ class Pair:public BasicObject{
         BasicObject* getSecond();
         void setFirst(BasicObject *f);
         void setSecond(BasicObject *s);
-        
-       string print();
-       bool equalsTo(const BasicObject& basicObject) const;
+
+        string print() const;
+        bool equalsTo(const BasicObject& basicObject) const;
     private:
         BasicObject *m_first;
         BasicObject *m_second;
 };
 
-#endif	/* PAIR_H */
+#endif
 

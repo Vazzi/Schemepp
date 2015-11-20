@@ -1,12 +1,6 @@
-/* 
- * File:   Symbol.h
- * Author: Vojta
- *
- * Created on 20. listopadu 2015, 10:10
- */
+#ifndef __SYMBOL_HPP__
+#define __SYMBOL_HPP__
 
-#ifndef SYMBOL_HP
-#define	SYMBOL_HP
 #include "BasicObject.hpp"
 #include <string>
 
@@ -16,10 +10,10 @@ class Symbol : public BasicObject{
     public:
         Symbol(string symbol);
         ~Symbol();
-        string print();
+        string print() const;
         bool equalsTo(const BasicObject& basicObject) const;
     private:
         string m_value;
 };
-#endif	/* SYMBOL_HPP */
 
+#endif

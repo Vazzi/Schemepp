@@ -1,12 +1,6 @@
-/* 
- * File:   Number.h
- * Author: Vojta
- *
- * Created on 20. listopadu 2015, 10:09
- */
+#ifndef __NUMBER_HPP__
+#define __NUMBER_HPP__
 
-#ifndef NUMBER_HPP
-#define	NUMBER_HPP
 #include "BasicObject.hpp"
 #include <string>
 
@@ -17,11 +11,10 @@ class Number : public BasicObject{
         Number(int value);
         ~Number();
         int getValue();
-        string print();
+        string print() const;
         bool equalsTo(const BasicObject& basicObject) const;
-   private:
+    private:
         int m_value;
-
 };
-#endif	/* NUMBER_HPP */
 
+#endif
