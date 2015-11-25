@@ -1,8 +1,8 @@
 #ifndef __CODE_OBJECT_HPP__
 #define __CODE_OBJECT_HPP__
 
-#include "../Objects/BasicObject.hpp"
-#include "Bytecode.hpp"
+#include "BasicObject.hpp"
+#include "../Bytecode/Bytecode.hpp"
 #include <string>
 #include <vector>
 
