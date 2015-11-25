@@ -2,6 +2,12 @@
 #include "BytecodeStream.hpp"
 #include "Bytecode.hpp"
 #include "DeserializationError.hpp"
+#include "../Objects/BasicObject.hpp"
+#include "../Objects/Null.hpp"
+#include "../Objects/Bool.hpp"
+#include "../Objects/Number.hpp"
+#include "../Objects/Pair.hpp"
+#include "../Objects/Symbol.hpp"
 #include <cstdio>
 
 const unsigned INIT_WORD = 0x00010B0B;
@@ -24,7 +30,7 @@ void Deserialization::deserializeByteCode(const string& fileName) {
         throw DeserializationError("Invalid bytecode. First word is not correct.");
     }
 
-    nextByteMatchType(Codeobject);
+    nextByteMatchType(TypeCodeobject);
     // TODO: Implement
 }
 
@@ -40,7 +46,7 @@ void Deserialization::nextByteMatchType(const serializableType_t& type) {
 }
 
 Instruction Deserialization::readInstruction() {
-    nextByteMatchType(Instr);
+    nextByteMatchType(TypeInstr);
     unsigned int wordData = m_stream->readWord();
     // Instruction bits first two from left
     // Argument the rest of the word last 6 bits
@@ -48,26 +54,62 @@ Instruction Deserialization::readInstruction() {
     return inst;
 }
 
-//Object* Deserialization::readNull() {
+BasicObject* Deserialization::readNull() {
+    return new Null();
+}
 
-//}
+string Deserialization::readString() {
+    unsigned length = m_stream->readWord();
+    return m_stream->readString(length);
+}
 
-//Object* Deserialization::readBoolean() {
+BasicObject* Deserialization::readBoolean() {
+    unsigned char value = m_stream->readByte();
+    return new Bool(value == 1);
+}
 
-//}
+BasicObject* Deserialization::readSymbol() {
+    string str = this->readString();
+    return new Symbol(str);
+}
 
-//Object* Deserialization::readSymbol() {
+BasicObject* Deserialization::readNumber() {
+    unsigned int word = m_stream->readWord();
+    return new Number(word);
+}
 
-//}
+BasicObject* Deserialization::readPair() {
+    BasicObject* first = this->readBasicObject();
+    BasicObject* second = this->readBasicObject();
+    return new Pair(first, second);
+}
 
-//Object* Deserialization::readNumber() {
+BasicObject* Deserialization::readSequence() {
+    // TODO: Implement sequence
+    return new BasicObject();
+}
 
-//}
-
-//Object* Deserialization::readPair() {
-
-//}
-
-//Object* Deserialization::readSequence() {
-
-//}
+BasicObject* Deserialization::readBasicObject() {
+    unsigned char byte = m_stream->readByte();
+    serializableType_t type = (serializableType_t)byte;
+    switch (type) {
+        case TypeNull:
+            return this->readNull();
+        case TypeBoolean:
+            return this->readBoolean();
+        case TypeSymbol:
+            return this->readSymbol();
+        case TypeNumber:
+            return this->readNumber();
+        case TypePair:
+            return this->readPair();
+        case TypeSequence:
+        case TypeCodeobject:
+        case TypeInstr:
+        case TypeString:
+            char *err = new char;
+            sprintf(err, "Expected a basic object type and got %c", byte);
+            string text = string(err);
+            throw DeserializationError(text);
+    }
+}

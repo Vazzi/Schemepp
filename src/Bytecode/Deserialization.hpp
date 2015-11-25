@@ -4,21 +4,21 @@
 #include <string>
 
 class BytecodeStream;
-class Object;
+class BasicObject;
 struct Instruction;
 
 using std::string;
 
 enum serializableType_t {
-    Null = '0',
-    Boolean = 'b',
-    String = 's',
-    Symbol = 'S',
-    Number = 'n',
-    Pair = 'p',
-    Instr = 'i',
-    Sequence = '[',
-    Codeobject = 'c'
+    TypeNull = '0',
+    TypeBoolean = 'b',
+    TypeString = 's',
+    TypeSymbol = 'S',
+    TypeNumber = 'n',
+    TypePair = 'p',
+    TypeInstr = 'i',
+    TypeSequence = '[',
+    TypeCodeobject = 'c'
 };
 
 class Deserialization {
@@ -34,12 +34,14 @@ class Deserialization {
 
         void nextByteMatchType(const serializableType_t& type);
         Instruction readInstruction();
-        //Object* readNull();
-        //Object* readBoolean();
-        //Object* readSymbol();
-        //Object* readNumber();
-        //Object* readPair();
-        //Object* readSequence();
+        BasicObject* readNull();
+        BasicObject* readBoolean();
+        BasicObject* readSymbol();
+        BasicObject* readNumber();
+        BasicObject* readPair();
+        BasicObject* readSequence();
+        BasicObject* readBasicObject();
+        string readString();
 };
 
 #endif
