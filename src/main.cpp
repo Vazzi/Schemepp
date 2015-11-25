@@ -2,6 +2,7 @@
 
 #include "Bytecode/Deserialization.hpp"
 #include "Bytecode/DeserializationError.hpp"
+#include "Objects/CodeObject.hpp"
 
 using std::string;
 using std::cerr;
@@ -16,18 +17,19 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    CodeObject* code;
+
     try {
         Deserialization* des = new Deserialization();
-        des->deserializeByteCode(fileName);
+        code = des->deserializeByteCode(fileName);
         delete des;
-        // TODO: Save deserialized code
     } catch (DeserializationError& err) {
         cerr << "Deserialization error: " << err.what() << "\n";
         return 1;
     }
 
     try {
-        // TODO: Run code
+        // TODO: Run code using code variable from previous deserialization
     } catch (...) {
         cerr << "Virtual Machine error: " << "\n";
         return 1;

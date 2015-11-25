@@ -5,6 +5,7 @@
 
 class BytecodeStream;
 class BasicObject;
+class CodeObject;
 struct Instruction;
 
 using std::string;
@@ -26,10 +27,9 @@ class Deserialization {
         Deserialization();
         ~Deserialization();
 
-        void deserializeByteCode(const string& fileName);
+        CodeObject* deserializeByteCode(const string& fileName);
 
     private:
-
         BytecodeStream* m_stream;
 
         void nextByteMatchType(const serializableType_t& type);
@@ -39,8 +39,8 @@ class Deserialization {
         BasicObject* readSymbol();
         BasicObject* readNumber();
         BasicObject* readPair();
-        BasicObject* readSequence();
         BasicObject* readBasicObject();
+        CodeObject* readCodeObject();
         string readString();
 };
 

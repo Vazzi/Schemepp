@@ -8,6 +8,7 @@
 #include "../Objects/Number.hpp"
 #include "../Objects/Pair.hpp"
 #include "../Objects/Symbol.hpp"
+#include "../Objects/CodeObject.hpp"
 #include <cstdio>
 
 const unsigned INIT_WORD = 0x00010B0B;
@@ -21,7 +22,7 @@ Deserialization::~Deserialization() {
 }
 
 // Deserialize file with byte code
-void Deserialization::deserializeByteCode(const string& fileName) {
+CodeObject* Deserialization::deserializeByteCode(const string& fileName) {
 
     m_stream = new BytecodeStream(fileName.c_str());
 
@@ -30,8 +31,7 @@ void Deserialization::deserializeByteCode(const string& fileName) {
         throw DeserializationError("Invalid bytecode. First word is not correct.");
     }
 
-    nextByteMatchType(TypeCodeobject);
-    // TODO: Implement
+    return this->readCodeObject();
 }
 
 // Throw exception if next byte in stream does not match type
@@ -84,11 +84,6 @@ BasicObject* Deserialization::readPair() {
     return new Pair(first, second);
 }
 
-BasicObject* Deserialization::readSequence() {
-    // TODO: Implement sequence
-    return new BasicObject();
-}
-
 BasicObject* Deserialization::readBasicObject() {
     unsigned char byte = m_stream->readByte();
     serializableType_t type = (serializableType_t)byte;
@@ -113,3 +108,42 @@ BasicObject* Deserialization::readBasicObject() {
             throw DeserializationError(text);
     }
 }
+
+CodeObject* Deserialization::readCodeObject() {
+    nextByteMatchType(TypeCodeobject);
+    CodeObject* object = new CodeObject();
+    object->name = this->readString();
+
+    unsigned int length;
+
+    // Read arguments
+    nextByteMatchType(TypeSequence);
+    length = m_stream->readWord();
+    while(length-- > 0) {
+        object->args.push_back(this->readString());
+    }
+
+    // Read constants
+    nextByteMatchType(TypeSequence);
+    length = m_stream->readWord();
+    while(length-- > 0) {
+        object->constants.push_back(this->readBasicObject());
+    }
+
+    // Read variable names
+    nextByteMatchType(TypeSequence);
+    length = m_stream->readWord();
+    while(length-- > 0) {
+        object->variableNames.push_back(this->readString());
+    }
+
+    // Read instructions
+    nextByteMatchType(TypeSequence);
+    length = m_stream->readWord();
+    while(length-- > 0) {
+        object->instructions.push_back(this->readInstruction());
+    }
+
+    return object;
+}
+
