@@ -1,5 +1,5 @@
-#ifndef __BYTECODE_OBJECT_HPP__
-#define __BYTECODE_OBJECT_HPP__
+#ifndef __CODE_OBJECT_HPP__
+#define __CODE_OBJECT_HPP__
 
 #include "../Objects/BasicObject.hpp"
 #include "Bytecode.hpp"
@@ -9,11 +9,11 @@
 using std::string;
 using std::vector;
 
-class BytecodeObject : public BasicObject {
+class CodeObject : public BasicObject {
     public:
-        BytecodeObject() {}
-        virtual ~BytecodeObject() {}
-        string print() const { return "#BYTECODE_OBJECT#"; }
+        CodeObject() {}
+        ~CodeObject() {}
+        string print() const { return "#CODE_OBJECT#"; }
 
         string name;
         vector<string> args;
