@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "Deserialization.hpp"
-#include "DeserializationError.hpp"
+#include "Bytecode/Deserialization.hpp"
+#include "Bytecode/DeserializationError.hpp"
 
 using std::string;
 using std::cerr;
