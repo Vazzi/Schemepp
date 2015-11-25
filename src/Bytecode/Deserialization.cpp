@@ -59,6 +59,7 @@ BasicObject* Deserialization::readNull() {
 }
 
 string Deserialization::readString() {
+    nextByteMatchType(TypeString);
     unsigned length = m_stream->readWord();
     return m_stream->readString(length);
 }
