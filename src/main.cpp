@@ -4,6 +4,7 @@
 #include "Bytecode/DeserializationError.hpp"
 #include "Objects/SchemeCodeObject.hpp"
 #include "VirtualMachine.hpp"
+#include "VirtualMachineError.hpp"
 
 using std::string;
 using std::cerr;
@@ -32,8 +33,8 @@ int main(int argc, char *argv[]) {
     try {
         VirtualMachine* vm = new VirtualMachine();
         vm->run(code);
-    } catch (...) {
-        cerr << "Virtual Machine error: " << "\n";
+    } catch (VirtualMachineError& err) {
+        cerr << "Virtual Machine error: " << err.what() << "\n";
         return 1;
     }
 
