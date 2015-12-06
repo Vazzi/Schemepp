@@ -1,19 +1,19 @@
-#include "Null.hpp"
+#include "SchemeNull.hpp"
 #include <typeinfo>
 
-Null::Null() {
+SchemeNull::SchemeNull() {
     // epmty
 }
 
-Null::~Null() {
+SchemeNull::~SchemeNull() {
     // empty
 }
 
-string Null::print() const {
+string SchemeNull::print() const {
     return "()";
 }
 
-bool Null::equalsTo(const BasicObject& basicObject) const {
+bool SchemeNull::equalsTo(const SchemeBasicObject& basicObject) const {
     if (typeid(*this).name() != typeid(basicObject).name()) {
         return false;
     }

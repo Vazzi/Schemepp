@@ -1,34 +1,34 @@
-#include "Number.hpp"
+#include "SchemeNumber.hpp"
 #include <typeinfo>
 #include <sstream>
 #include <iostream>
 
 using std::stringstream;
 
-Number::Number(int number){
+SchemeNumber::SchemeNumber(int number){
     this->m_value = number;
 }
 
-Number::~Number() {
+SchemeNumber::~SchemeNumber() {
     // empty
 }
 
-string Number::print() const {
+string SchemeNumber::print() const {
     stringstream convert;
     convert << this->m_value;
     return convert.str();
 }
 
-int Number::getValue() {
+int SchemeNumber::getValue() {
     return m_value;
 }
 
-bool Number::equalsTo(const BasicObject& basicObject) const {
+bool SchemeNumber::equalsTo(const SchemeBasicObject& basicObject) const {
     if (typeid(*this).name() != typeid(basicObject).name()) {
         return false;
     }
     //dynamicke pretypovani
-    const Number& objectNumber = dynamic_cast<const Number&>(basicObject);
+    const SchemeNumber& objectNumber = dynamic_cast<const SchemeNumber&>(basicObject);
     if (objectNumber.m_value == this->m_value) {
         return true;
     } else {

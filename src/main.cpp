@@ -2,7 +2,7 @@
 
 #include "Bytecode/Deserialization.hpp"
 #include "Bytecode/DeserializationError.hpp"
-#include "Objects/CodeObject.hpp"
+#include "Objects/SchemeCodeObject.hpp"
 
 using std::string;
 using std::cerr;
@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    CodeObject* code;
+    SchemeCodeObject* code;
 
     try {
         Deserialization* des = new Deserialization();

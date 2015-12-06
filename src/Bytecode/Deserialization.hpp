@@ -4,8 +4,8 @@
 #include <string>
 
 class BytecodeStream;
-class BasicObject;
-class CodeObject;
+class SchemeBasicObject;
+class SchemeCodeObject;
 struct Instruction;
 
 using std::string;
@@ -27,20 +27,20 @@ class Deserialization {
         Deserialization();
         ~Deserialization();
 
-        CodeObject* deserializeByteCode(const string& fileName);
+        SchemeCodeObject* deserializeByteCode(const string& fileName);
 
     private:
         BytecodeStream* m_stream;
 
         void nextByteMatchType(const serializableType_t& type);
         Instruction readInstruction();
-        BasicObject* readNull();
-        BasicObject* readBoolean();
-        BasicObject* readSymbol();
-        BasicObject* readNumber();
-        BasicObject* readPair();
-        BasicObject* readBasicObject();
-        CodeObject* readCodeObject();
+        SchemeBasicObject* readNull();
+        SchemeBasicObject* readBoolean();
+        SchemeBasicObject* readSymbol();
+        SchemeBasicObject* readNumber();
+        SchemeBasicObject* readPair();
+        SchemeBasicObject* readBasicObject();
+        SchemeCodeObject* readCodeObject();
         string readString();
 };
 

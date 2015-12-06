@@ -2,13 +2,13 @@
 #include "BytecodeStream.hpp"
 #include "Bytecode.hpp"
 #include "DeserializationError.hpp"
-#include "../Objects/BasicObject.hpp"
-#include "../Objects/Null.hpp"
-#include "../Objects/Bool.hpp"
-#include "../Objects/Number.hpp"
-#include "../Objects/Pair.hpp"
-#include "../Objects/Symbol.hpp"
-#include "../Objects/CodeObject.hpp"
+#include "../Objects/SchemeBasicObject.hpp"
+#include "../Objects/SchemeNull.hpp"
+#include "../Objects/SchemeBool.hpp"
+#include "../Objects/SchemeNumber.hpp"
+#include "../Objects/SchemePair.hpp"
+#include "../Objects/SchemeSymbol.hpp"
+#include "../Objects/SchemeCodeObject.hpp"
 #include <cstdio>
 
 const unsigned INIT_WORD = 0x00010B0B;
@@ -22,7 +22,7 @@ Deserialization::~Deserialization() {
 }
 
 // Deserialize file with byte code
-CodeObject* Deserialization::deserializeByteCode(const string& fileName) {
+SchemeCodeObject* Deserialization::deserializeByteCode(const string& fileName) {
 
     m_stream = new BytecodeStream(fileName.c_str());
 
@@ -54,8 +54,8 @@ Instruction Deserialization::readInstruction() {
     return inst;
 }
 
-BasicObject* Deserialization::readNull() {
-    return new Null();
+SchemeBasicObject* Deserialization::readNull() {
+    return new SchemeNull();
 }
 
 string Deserialization::readString() {
@@ -64,28 +64,28 @@ string Deserialization::readString() {
     return m_stream->readString(length);
 }
 
-BasicObject* Deserialization::readBoolean() {
+SchemeBasicObject* Deserialization::readBoolean() {
     unsigned char value = m_stream->readByte();
-    return new Bool(value == 1);
+    return new SchemeBool(value == 1);
 }
 
-BasicObject* Deserialization::readSymbol() {
+SchemeBasicObject* Deserialization::readSymbol() {
     string str = this->readString();
-    return new Symbol(str);
+    return new SchemeSymbol(str);
 }
 
-BasicObject* Deserialization::readNumber() {
+SchemeBasicObject* Deserialization::readNumber() {
     unsigned int word = m_stream->readWord();
-    return new Number(word);
+    return new SchemeNumber(word);
 }
 
-BasicObject* Deserialization::readPair() {
-    BasicObject* first = this->readBasicObject();
-    BasicObject* second = this->readBasicObject();
-    return new Pair(first, second);
+SchemeBasicObject* Deserialization::readPair() {
+    SchemeBasicObject* first = this->readBasicObject();
+    SchemeBasicObject* second = this->readBasicObject();
+    return new SchemePair(first, second);
 }
 
-BasicObject* Deserialization::readBasicObject() {
+SchemeBasicObject* Deserialization::readBasicObject() {
     unsigned char byte = m_stream->readByte();
     serializableType_t type = (serializableType_t)byte;
     switch (type) {
@@ -110,9 +110,9 @@ BasicObject* Deserialization::readBasicObject() {
     }
 }
 
-CodeObject* Deserialization::readCodeObject() {
+SchemeCodeObject* Deserialization::readCodeObject() {
     nextByteMatchType(TypeCodeobject);
-    CodeObject* object = new CodeObject();
+    SchemeCodeObject* object = new SchemeCodeObject();
     object->name = this->readString();
 
     unsigned int length;
