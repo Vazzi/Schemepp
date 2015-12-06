@@ -3,6 +3,7 @@
 #include "Bytecode/Deserialization.hpp"
 #include "Bytecode/DeserializationError.hpp"
 #include "Objects/SchemeCodeObject.hpp"
+#include "VirtualMachine.hpp"
 
 using std::string;
 using std::cerr;
@@ -29,7 +30,8 @@ int main(int argc, char *argv[]) {
     }
 
     try {
-        // TODO: Run code using code variable from previous deserialization
+        VirtualMachine* vm = new VirtualMachine();
+        vm->run(code);
     } catch (...) {
         cerr << "Virtual Machine error: " << "\n";
         return 1;
