@@ -147,6 +147,9 @@ void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalReturnOP() {
+    if (m_frameStack.empty()) {
+        throw VirtualMachineError("Evaluation of Return OP: Frame stack is empty");
+    }
     m_currFrame = m_frameStack.top();
     m_frameStack.pop();
 }
