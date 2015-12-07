@@ -110,19 +110,32 @@ void VirtualMachine::evalInstruction(const Instruction& instr) {
 }
 
 void VirtualMachine::evalConstOP(const unsigned int& instrArg) {
+    assert(instrArg < m_currFrame.codeObject->constants.size()
+            && "Constant index out of bounds");
+
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
     m_valuesStack.push(value);
 }
 
 void VirtualMachine::evalLoadVarOP(const unsigned int& instrArg) {
-    (void)instrArg;
-    // TODO: Implement
+    assert(instrArg < m_currFrame.codeObject->variableNames.size()
+            && "Variables name index out of bounds");
+
+    string name = m_currFrame.codeObject->variableNames[instrArg];
+    SchemeObject* value = m_currFrame.env->getVariable(name);
+    if (value == 0) {
+        char *err = new char;
+        sprintf(err, "Invalid variable %s", name.c_str());
+        string text = string(err);
+        throw VirtualMachineError(text);
+    }
+    m_valuesStack.push(value);
 }
 
 void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
     assert(!m_valuesStack.empty() && "Values stack is empty");
     assert(instrArg < m_currFrame.codeObject->variableNames.size()
-            && "Variables name offset out of bounds");
+            && "Variables name index out of bounds");
 
     SchemeObject* value = m_valuesStack.top();
     m_valuesStack.pop();
@@ -139,7 +152,7 @@ void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
 void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
     assert(!m_valuesStack.empty() && "Values stack is empty");
     assert(instrArg < m_currFrame.codeObject->variableNames.size()
-            && "Variables name offset out of bounds");
+            && "Variables name index out of bounds");
 
     SchemeObject* value = m_valuesStack.top();
     m_valuesStack.pop();
@@ -149,7 +162,7 @@ void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
 
 void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
     assert(instrArg < m_currFrame.codeObject->constants.size()
-            && "Constant offset is out of bounds");
+            && "Constant index out of bounds");
 
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
     SchemeCodeObject* func = dynamic_cast<SchemeCodeObject*>(value);
