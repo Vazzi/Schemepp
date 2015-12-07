@@ -13,10 +13,11 @@ using std::vector;
 
 typedef vector<SchemeObject*> BuiltInArgs;
 typedef SchemeObject* (*BuiltInFunc)(BuiltInArgs& args);
+typedef map<string, BuiltInFunc> BuiltInMap;
 
 class BuiltInFunctions {
     public:
-        static map<string, BuiltInFunc> makeMapOfAll();
+        static BuiltInMap makeMapOfAll();
 };
 
 #endif /* ifndef __BUILT_IN_HPP__ */
