@@ -33,15 +33,15 @@ class VirtualMachine {
 
         void evalInstruction(const Instruction& instr);
         void evalConstOP(const unsigned int& instrArg);
-        void evalLoadVarOP();
-        void evalStoreVarOP();
-        void evalDefVarOP();
-        void evalFunctionOP();
+        void evalLoadVarOP(const unsigned int& instrArg);
+        void evalStoreVarOP(const unsigned int& instrArg);
+        void evalDefVarOP(const unsigned int& instrArg);
+        void evalFunctionOP(const unsigned int& instrArg);
         void evalPopOP();
-        void evalJumpOP();
-        void evalFJumpOP();
+        void evalJumpOP(const unsigned int& instrArg);
+        void evalFJumpOP(const unsigned int& instrArg);
         void evalReturnOP();
-        void evalCallOP();
+        void evalCallOP(const unsigned int& instrArg);
 };
 
 #endif /* ifndef __VIRTUAL_MACHINE_HPP__ */

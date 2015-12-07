@@ -72,31 +72,31 @@ void VirtualMachine::evalInstruction(const Instruction& instr) {
             this->evalConstOP(instr.arg);
             break;
         case OP_LOADVAR:
-            this->evalLoadVarOP();
+            this->evalLoadVarOP(instr.arg);
             break;
         case OP_STOREVAR:
-            this->evalStoreVarOP();
+            this->evalStoreVarOP(instr.arg);
             break;
         case OP_DEFVAR:
-            this->evalDefVarOP();
+            this->evalDefVarOP(instr.arg);
             break;
         case OP_FUNCTION:
-            this->evalFunctionOP();
+            this->evalFunctionOP(instr.arg);
             break;
         case OP_POP:
             this->evalPopOP();
             break;
         case OP_JUMP:
-            this->evalJumpOP();
+            this->evalJumpOP(instr.arg);
             break;
         case OP_FJUMP:
-            this->evalFJumpOP();
+            this->evalFJumpOP(instr.arg);
             break;
         case OP_RETURN:
             this->evalReturnOP();
             break;
         case OP_CALL:
-            this->evalCallOP();
+            this->evalCallOP(instr.arg);
             break;
         case OP_INVALID:
         default:
@@ -112,19 +112,23 @@ void VirtualMachine::evalConstOP(const unsigned int& instrArg) {
     m_valuesStack.push(value);
 }
 
-void VirtualMachine::evalLoadVarOP() {
+void VirtualMachine::evalLoadVarOP(const unsigned int& instrArg) {
+    (void)instrArg;
     // TODO: Implement
 }
 
-void VirtualMachine::evalStoreVarOP() {
+void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
+    (void)instrArg;
     // TODO: Implement
 }
 
-void VirtualMachine::evalDefVarOP() {
+void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
+    (void)instrArg;
     // TODO: Implement
 }
 
-void VirtualMachine::evalFunctionOP() {
+void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
+    (void)instrArg;
     // TODO: Implement
 }
 
@@ -132,11 +136,13 @@ void VirtualMachine::evalPopOP() {
     // TODO: Implement
 }
 
-void VirtualMachine::evalJumpOP() {
+void VirtualMachine::evalJumpOP(const unsigned int& instrArg) {
+    (void)instrArg;
     // TODO: Implement
 }
 
-void VirtualMachine::evalFJumpOP() {
+void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
+    (void)instrArg;
     // TODO: Implement
 }
 
@@ -144,6 +150,7 @@ void VirtualMachine::evalReturnOP() {
     // TODO: Implement
 }
 
-void VirtualMachine::evalCallOP() {
+void VirtualMachine::evalCallOP(const unsigned int& instrArg) {
+    (void)instrArg;
     // TODO: Implement
 }
