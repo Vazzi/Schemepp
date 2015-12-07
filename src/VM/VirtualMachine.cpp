@@ -36,6 +36,36 @@ void VirtualMachine::run(SchemeCodeObject* codeObject) {
         } else {
             break; // Last instruction, we are done
         }
+
+        // Evaluate instruction
+        switch (instr.opCode) {
+            case OP_CONST:
+                break;
+            case OP_LOADVAR:
+                break;
+            case OP_STOREVAR:
+                break;
+            case OP_DEFVAR:
+                break;
+            case OP_FUNCTION:
+                break;
+            case OP_POP:
+                break;
+            case OP_JUMP:
+                break;
+            case OP_FJUMP:
+                break;
+            case OP_RETURN:
+                break;
+            case OP_CALL:
+                break;
+            case OP_INVALID:
+            default:
+                char *err = new char;
+                sprintf(err, "Invalid instruction operation code 0x%02X", instr.opCode);
+                string text = string(err);
+                throw VirtualMachineError(text);
+        }
     }
 }
 
