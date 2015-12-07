@@ -147,7 +147,8 @@ void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalReturnOP() {
-    // TODO: Implement
+    m_currFrame = m_frameStack.top();
+    m_frameStack.pop();
 }
 
 void VirtualMachine::evalCallOP(const unsigned int& instrArg) {
