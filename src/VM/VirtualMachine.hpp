@@ -29,10 +29,10 @@ class VirtualMachine {
         ExecutionFrame m_currFrame;
 
         Environment* createGlobalEnvironment();
-        bool getNextInstruction(const SchemeCodeObject* currObject, Instruction& instr) const;
+        bool getNextInstruction(Instruction& instr) const;
 
         void evalInstruction(const Instruction& instr);
-        void evalConstOP();
+        void evalConstOP(const unsigned int& instrArg);
         void evalLoadVarOP();
         void evalStoreVarOP();
         void evalDefVarOP();

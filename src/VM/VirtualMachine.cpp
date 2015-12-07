@@ -27,16 +27,14 @@ void VirtualMachine::run(SchemeCodeObject* codeObject) {
     m_currFrame.pc = 0;
 
     while(true) {
-        SchemeCodeObject* currObject = m_currFrame.codeObject;
-
         // Get instruction
         Instruction instr;
-        if (this->getNextInstruction(currObject, instr)) {
+        if (this->getNextInstruction(instr)) {
             m_currFrame.pc++;
         } else {
             break; // Last instruction, we are done
         }
-
+        // Evaluate instruction
         this->evalInstruction(instr);
     }
 }
@@ -55,16 +53,15 @@ Environment* VirtualMachine::createGlobalEnvironment() {
     return env;
 }
 
-bool VirtualMachine::getNextInstruction(const SchemeCodeObject* currObject,
-        Instruction& instr) const {
-    if (m_currFrame.pc >= currObject->instructions.size()) {
+bool VirtualMachine::getNextInstruction(Instruction& instr) const {
+    if (m_currFrame.pc >= m_currFrame.codeObject->instructions.size()) {
         if (m_frameStack.size() == 0) {
             return false;
         } else {
             throw VirtualMachineError("Code ended prematurely");
         }
     } else {
-        instr = currObject->instructions[m_currFrame.pc];
+        instr = m_currFrame.codeObject->instructions[m_currFrame.pc];
     }
     return true;
 }
@@ -72,7 +69,7 @@ bool VirtualMachine::getNextInstruction(const SchemeCodeObject* currObject,
 void VirtualMachine::evalInstruction(const Instruction& instr) {
     switch (instr.opCode) {
         case OP_CONST:
-            this->evalConstOP();
+            this->evalConstOP(instr.arg);
             break;
         case OP_LOADVAR:
             this->evalLoadVarOP();
@@ -110,8 +107,9 @@ void VirtualMachine::evalInstruction(const Instruction& instr) {
     }
 }
 
-void VirtualMachine::evalConstOP() {
-    // TODO: Implement
+void VirtualMachine::evalConstOP(const unsigned int& instrArg) {
+    SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
+    m_valuesStack.push(value);
 }
 
 void VirtualMachine::evalLoadVarOP() {
