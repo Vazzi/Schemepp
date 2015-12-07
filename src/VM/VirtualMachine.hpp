@@ -1,14 +1,30 @@
 #ifndef __VIRTUAL_MACHINE_HPP__
 #define __VIRTUAL_MACHINE_HPP__
 
+#include <stack>
+
 class SchemeCodeObject;
+class SchemeObject;
+
+using std::stack;
+
+struct ExecutionFrame {
+    SchemeCodeObject* codeObject;
+    unsigned int pc; // Program counter - which instruction is next to execute
+    // TODO: Implement environment
+    //Environment* env; // Current environment
+};
 
 class VirtualMachine {
     public:
-        VirtualMachine() {}
-        ~VirtualMachine() {}
+        VirtualMachine();
+        ~VirtualMachine();
 
         void run(SchemeCodeObject* bytecode);
+    private:
+        stack<ExecutionFrame> m_frameStack;
+        stack<SchemeObject*> m_valuesStack;
+        ExecutionFrame m_currFrame;
 };
 
 #endif /* ifndef __VIRTUAL_MACHINE_HPP__ */
