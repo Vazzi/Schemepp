@@ -37,35 +37,7 @@ void VirtualMachine::run(SchemeCodeObject* codeObject) {
             break; // Last instruction, we are done
         }
 
-        // Evaluate instruction
-        switch (instr.opCode) {
-            case OP_CONST:
-                break;
-            case OP_LOADVAR:
-                break;
-            case OP_STOREVAR:
-                break;
-            case OP_DEFVAR:
-                break;
-            case OP_FUNCTION:
-                break;
-            case OP_POP:
-                break;
-            case OP_JUMP:
-                break;
-            case OP_FJUMP:
-                break;
-            case OP_RETURN:
-                break;
-            case OP_CALL:
-                break;
-            case OP_INVALID:
-            default:
-                char *err = new char;
-                sprintf(err, "Invalid instruction operation code 0x%02X", instr.opCode);
-                string text = string(err);
-                throw VirtualMachineError(text);
-        }
+        this->evalInstruction(instr);
     }
 }
 
@@ -95,4 +67,85 @@ bool VirtualMachine::getNextInstruction(const SchemeCodeObject* currObject,
         instr = currObject->instructions[m_currFrame.pc];
     }
     return true;
+}
+
+void VirtualMachine::evalInstruction(const Instruction& instr) {
+    switch (instr.opCode) {
+        case OP_CONST:
+            this->evalConstOP();
+            break;
+        case OP_LOADVAR:
+            this->evalLoadVarOP();
+            break;
+        case OP_STOREVAR:
+            this->evalStoreVarOP();
+            break;
+        case OP_DEFVAR:
+            this->evalDefVarOP();
+            break;
+        case OP_FUNCTION:
+            this->evalFunctionOP();
+            break;
+        case OP_POP:
+            this->evalPopOP();
+            break;
+        case OP_JUMP:
+            this->evalJumpOP();
+            break;
+        case OP_FJUMP:
+            this->evalFJumpOP();
+            break;
+        case OP_RETURN:
+            this->evalReturnOP();
+            break;
+        case OP_CALL:
+            this->evalCallOP();
+            break;
+        case OP_INVALID:
+        default:
+            char *err = new char;
+            sprintf(err, "Invalid instruction operation code 0x%02X", instr.opCode);
+            string text = string(err);
+            throw VirtualMachineError(text);
+    }
+}
+
+void VirtualMachine::evalConstOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalLoadVarOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalStoreVarOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalDefVarOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalFunctionOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalPopOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalJumpOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalFJumpOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalReturnOP() {
+    // TODO: Implement
+}
+
+void VirtualMachine::evalCallOP() {
+    // TODO: Implement
 }

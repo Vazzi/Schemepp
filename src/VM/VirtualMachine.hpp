@@ -30,6 +30,18 @@ class VirtualMachine {
 
         Environment* createGlobalEnvironment();
         bool getNextInstruction(const SchemeCodeObject* currObject, Instruction& instr) const;
+
+        void evalInstruction(const Instruction& instr);
+        void evalConstOP();
+        void evalLoadVarOP();
+        void evalStoreVarOP();
+        void evalDefVarOP();
+        void evalFunctionOP();
+        void evalPopOP();
+        void evalJumpOP();
+        void evalFJumpOP();
+        void evalReturnOP();
+        void evalCallOP();
 };
 
 #endif /* ifndef __VIRTUAL_MACHINE_HPP__ */
