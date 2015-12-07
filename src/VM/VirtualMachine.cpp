@@ -120,8 +120,20 @@ void VirtualMachine::evalLoadVarOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
-    (void)instrArg;
-    // TODO: Implement
+    assert(!m_valuesStack.empty() && "Values stack is empty");
+    assert(instrArg < m_currFrame.codeObject->variableNames.size()
+            && "Variables name offset out of bounds");
+
+    SchemeObject* value = m_valuesStack.top();
+    m_valuesStack.pop();
+    string name = m_currFrame.codeObject->variableNames[instrArg];
+    SchemeObject* variable = m_currFrame.env->setVariable(name, value);
+    if (variable == 0) {
+        char *err = new char;
+        sprintf(err, "Invalid variable %s", name.c_str());
+        string text = string(err);
+        throw VirtualMachineError(text);
+    }
 }
 
 void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
@@ -157,6 +169,7 @@ void VirtualMachine::evalJumpOP(const unsigned int& instrArg) {
 
 void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
     assert(!m_valuesStack.empty() && "Values stack is empty");
+
     SchemeBool* predicate = dynamic_cast<SchemeBool*>(m_valuesStack.top());
     m_valuesStack.pop();
     if (predicate && !predicate->getValue()) {
@@ -166,6 +179,7 @@ void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
 
 void VirtualMachine::evalReturnOP() {
     assert(!m_frameStack.empty() && "Frame stack is empty");
+
     m_currFrame = m_frameStack.top();
     m_frameStack.pop();
 }
