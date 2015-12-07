@@ -15,9 +15,6 @@ typedef vector<SchemeObject*> BuiltInArgs;
 typedef SchemeObject* (*BuiltInFunc)(BuiltInArgs& args);
 typedef map<string, BuiltInFunc> BuiltInMap;
 
-class BuiltInFunctions {
-    public:
-        static BuiltInMap makeMapOfAll();
-};
+BuiltInMap mapOfAllBuiltIns();
 
 #endif /* ifndef __BUILT_IN_HPP__ */

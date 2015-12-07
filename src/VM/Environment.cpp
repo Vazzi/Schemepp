@@ -7,7 +7,8 @@ Environment::Environment(Environment* parent): m_parent(parent) {
 }
 
 Environment::~Environment() {
-    // empty
+    m_parent = NULL;
+    // TODO: Remove all variables
 }
 
 void Environment::defineVariable(const string& name, SchemeObject* value) {
