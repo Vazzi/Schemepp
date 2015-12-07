@@ -130,8 +130,11 @@ void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
-    (void)instrArg;
-    // TODO: Implement
+    assert(instrArg < m_currFrame.codeObject->constants.size() && "Constant offset is out of bounds");
+    SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
+    SchemeCodeObject* func = dynamic_cast<SchemeCodeObject*>(value);
+    // TODO: Implement Scheme Function
+    //m_valuesStack.push(new SchemeFunction(func));
 }
 
 void VirtualMachine::evalPopOP() {
