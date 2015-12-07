@@ -4,6 +4,7 @@
 #include "Environment.hpp"
 #include "BuiltIn/BuiltIn.hpp"
 #include "BuiltIn/BuiltInFunction.hpp"
+#include "VirtualMachineError.hpp"
 
 VirtualMachine::VirtualMachine() {
     m_currFrame.codeObject = 0;
@@ -15,6 +16,7 @@ VirtualMachine::~VirtualMachine() {
     delete m_currFrame.env;
 }
 
+
 void VirtualMachine::run(SchemeCodeObject* codeObject) {
     if (codeObject == NULL) {
         return;
@@ -23,6 +25,18 @@ void VirtualMachine::run(SchemeCodeObject* codeObject) {
     // Set current frame
     m_currFrame.codeObject = codeObject;
     m_currFrame.pc = 0;
+
+    while(true) {
+        SchemeCodeObject* currObject = m_currFrame.codeObject;
+
+        // Get instruction
+        Instruction instr;
+        if (this->getNextInstruction(currObject, instr)) {
+            m_currFrame.pc++;
+        } else {
+            break; // Last instruction, we are done
+        }
+    }
 }
 
 Environment* VirtualMachine::createGlobalEnvironment() {
@@ -37,4 +51,18 @@ Environment* VirtualMachine::createGlobalEnvironment() {
     }
 
     return env;
+}
+
+bool VirtualMachine::getNextInstruction(const SchemeCodeObject* currObject,
+        Instruction& instr) const {
+    if (m_currFrame.pc >= currObject->instructions.size()) {
+        if (m_frameStack.size() == 0) {
+            return false;
+        } else {
+            throw VirtualMachineError("Code ended prematurely");
+        }
+    } else {
+        instr = currObject->instructions[m_currFrame.pc];
+    }
+    return true;
 }

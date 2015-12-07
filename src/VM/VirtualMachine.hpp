@@ -7,6 +7,8 @@ class SchemeCodeObject;
 class SchemeObject;
 class Environment;
 
+struct Instruction;
+
 using std::stack;
 
 struct ExecutionFrame {
@@ -27,6 +29,7 @@ class VirtualMachine {
         ExecutionFrame m_currFrame;
 
         Environment* createGlobalEnvironment();
+        bool getNextInstruction(const SchemeCodeObject* currObject, Instruction& instr) const;
 };
 
 #endif /* ifndef __VIRTUAL_MACHINE_HPP__ */
