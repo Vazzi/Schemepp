@@ -135,7 +135,9 @@ void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalPopOP() {
-    // TODO: Implement
+    if (!m_valuesStack.empty()) {
+        m_valuesStack.pop();
+    }
 }
 
 void VirtualMachine::evalJumpOP(const unsigned int& instrArg) {
