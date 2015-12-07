@@ -1,10 +1,12 @@
 #include "VirtualMachine.hpp"
 
 #include "../Objects/SchemeCodeObject.hpp"
+#include "../Objects/SchemeBool.hpp"
 #include "Environment.hpp"
 #include "BuiltIn/BuiltIn.hpp"
 #include "BuiltIn/BuiltInFunction.hpp"
 #include "VirtualMachineError.hpp"
+#include <cassert>
 
 VirtualMachine::VirtualMachine() {
     m_currFrame.codeObject = 0;
@@ -137,19 +139,20 @@ void VirtualMachine::evalPopOP() {
 }
 
 void VirtualMachine::evalJumpOP(const unsigned int& instrArg) {
-    (void)instrArg;
-    // TODO: Implement
+    m_currFrame.pc = instrArg;
 }
 
 void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
-    (void)instrArg;
-    // TODO: Implement
+    assert(!m_valuesStack.empty() && "Values stack is empty");
+    SchemeBool* predicate = dynamic_cast<SchemeBool*>(m_valuesStack.top());
+    m_valuesStack.pop();
+    if (predicate && !predicate->getValue()) {
+        m_currFrame.pc = instrArg;
+    }
 }
 
 void VirtualMachine::evalReturnOP() {
-    if (m_frameStack.empty()) {
-        throw VirtualMachineError("Evaluation of Return OP: Frame stack is empty");
-    }
+    assert(!m_frameStack.empty() && "Frame stack is empty");
     m_currFrame = m_frameStack.top();
     m_frameStack.pop();
 }
