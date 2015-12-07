@@ -5,14 +5,14 @@
 
 class SchemeCodeObject;
 class SchemeObject;
+class Environment;
 
 using std::stack;
 
 struct ExecutionFrame {
     SchemeCodeObject* codeObject;
     unsigned int pc; // Program counter - which instruction is next to execute
-    // TODO: Implement environment
-    //Environment* env; // Current environment
+    Environment* env; // Current environment
 };
 
 class VirtualMachine {
@@ -25,6 +25,8 @@ class VirtualMachine {
         stack<ExecutionFrame> m_frameStack;
         stack<SchemeObject*> m_valuesStack;
         ExecutionFrame m_currFrame;
+
+        Environment* createGlobalEnvironment();
 };
 
 #endif /* ifndef __VIRTUAL_MACHINE_HPP__ */
