@@ -23,7 +23,7 @@ int SchemeNumber::getValue() {
     return m_value;
 }
 
-bool SchemeNumber::equalsTo(const SchemeBasicObject& basicObject) const {
+bool SchemeNumber::equalsTo(const SchemeObject& basicObject) const {
     if (typeid(*this).name() != typeid(basicObject).name()) {
         return false;
     }

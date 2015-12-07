@@ -1,17 +1,17 @@
 #ifndef __SCHEME_SYMBOL_HPP__
 #define __SCHEME_SYMBOL_HPP__
 
-#include "SchemeBasicObject.hpp"
+#include "SchemeObject.hpp"
 #include <string>
 
 using std::string;
 
-class SchemeSymbol : public SchemeBasicObject{
+class SchemeSymbol : public SchemeObject{
     public:
         SchemeSymbol(string symbol);
         ~SchemeSymbol();
         string print() const;
-        bool equalsTo(const SchemeBasicObject& basicObject) const;
+        bool equalsTo(const SchemeObject& basicObject) const;
     private:
         string m_value;
 };

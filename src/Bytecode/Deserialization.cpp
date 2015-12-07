@@ -2,7 +2,7 @@
 #include "BytecodeStream.hpp"
 #include "Bytecode.hpp"
 #include "DeserializationError.hpp"
-#include "../Objects/SchemeBasicObject.hpp"
+#include "../Objects/SchemeObject.hpp"
 #include "../Objects/SchemeNull.hpp"
 #include "../Objects/SchemeBool.hpp"
 #include "../Objects/SchemeNumber.hpp"
@@ -54,7 +54,7 @@ Instruction Deserialization::readInstruction() {
     return inst;
 }
 
-SchemeBasicObject* Deserialization::readNull() {
+SchemeObject* Deserialization::readNull() {
     return new SchemeNull();
 }
 
@@ -64,28 +64,28 @@ string Deserialization::readString() {
     return m_stream->readString(length);
 }
 
-SchemeBasicObject* Deserialization::readBoolean() {
+SchemeObject* Deserialization::readBoolean() {
     unsigned char value = m_stream->readByte();
     return new SchemeBool(value == 1);
 }
 
-SchemeBasicObject* Deserialization::readSymbol() {
+SchemeObject* Deserialization::readSymbol() {
     string str = this->readString();
     return new SchemeSymbol(str);
 }
 
-SchemeBasicObject* Deserialization::readNumber() {
+SchemeObject* Deserialization::readNumber() {
     unsigned int word = m_stream->readWord();
     return new SchemeNumber(word);
 }
 
-SchemeBasicObject* Deserialization::readPair() {
-    SchemeBasicObject* first = this->readBasicObject();
-    SchemeBasicObject* second = this->readBasicObject();
+SchemeObject* Deserialization::readPair() {
+    SchemeObject* first = this->readBasicObject();
+    SchemeObject* second = this->readBasicObject();
     return new SchemePair(first, second);
 }
 
-SchemeBasicObject* Deserialization::readBasicObject() {
+SchemeObject* Deserialization::readBasicObject() {
     unsigned char byte = m_stream->readByte();
     serializableType_t type = (serializableType_t)byte;
     switch (type) {

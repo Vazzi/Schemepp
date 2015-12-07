@@ -1,25 +1,25 @@
 #ifndef __SCHEME_PAIR_HPP__
 #define __SCHEME_PAIR_HPP__
 
-#include "SchemeBasicObject.hpp"
+#include "SchemeObject.hpp"
 #include <string>
 
 using std::string;
 
-class SchemePair : public SchemeBasicObject{
+class SchemePair : public SchemeObject{
     public:
-        SchemePair(SchemeBasicObject *first, SchemeBasicObject *second);
+        SchemePair(SchemeObject *first, SchemeObject *second);
         ~SchemePair();
-        SchemeBasicObject* getFirst();
-        SchemeBasicObject* getSecond();
-        void setFirst(SchemeBasicObject *f);
-        void setSecond(SchemeBasicObject *s);
+        SchemeObject* getFirst();
+        SchemeObject* getSecond();
+        void setFirst(SchemeObject *f);
+        void setSecond(SchemeObject *s);
 
         string print() const;
-        bool equalsTo(const SchemeBasicObject& basicObject) const;
+        bool equalsTo(const SchemeObject& basicObject) const;
     private:
-        SchemeBasicObject *m_first;
-        SchemeBasicObject *m_second;
+        SchemeObject *m_first;
+        SchemeObject *m_second;
 };
 
 #endif

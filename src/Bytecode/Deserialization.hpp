@@ -4,7 +4,7 @@
 #include <string>
 
 class BytecodeStream;
-class SchemeBasicObject;
+class SchemeObject;
 class SchemeCodeObject;
 struct Instruction;
 
@@ -34,12 +34,12 @@ class Deserialization {
 
         void nextByteMatchType(const serializableType_t& type);
         Instruction readInstruction();
-        SchemeBasicObject* readNull();
-        SchemeBasicObject* readBoolean();
-        SchemeBasicObject* readSymbol();
-        SchemeBasicObject* readNumber();
-        SchemeBasicObject* readPair();
-        SchemeBasicObject* readBasicObject();
+        SchemeObject* readNull();
+        SchemeObject* readBoolean();
+        SchemeObject* readSymbol();
+        SchemeObject* readNumber();
+        SchemeObject* readPair();
+        SchemeObject* readBasicObject();
         SchemeCodeObject* readCodeObject();
         string readString();
 };

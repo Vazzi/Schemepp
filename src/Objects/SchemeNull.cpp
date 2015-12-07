@@ -13,7 +13,7 @@ string SchemeNull::print() const {
     return "()";
 }
 
-bool SchemeNull::equalsTo(const SchemeBasicObject& basicObject) const {
+bool SchemeNull::equalsTo(const SchemeObject& basicObject) const {
     if (typeid(*this).name() != typeid(basicObject).name()) {
         return false;
     }

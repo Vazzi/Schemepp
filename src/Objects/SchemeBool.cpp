@@ -20,7 +20,7 @@ string SchemeBool::print() const {
     return "f";
 }
 
-bool SchemeBool::equalsTo(const SchemeBasicObject& basicObject) const {
+bool SchemeBool::equalsTo(const SchemeObject& basicObject) const {
     if (typeid(*this).name() != typeid(basicObject).name()) {
         return false;
     }

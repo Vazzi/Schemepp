@@ -13,7 +13,7 @@ string SchemeSymbol::print() const{
     return m_value;
 }
 
-bool SchemeSymbol::equalsTo(const SchemeBasicObject& basicObject) const {
+bool SchemeSymbol::equalsTo(const SchemeObject& basicObject) const {
     if (typeid(*this).name() != typeid(basicObject).name()) {
         return false;
     }

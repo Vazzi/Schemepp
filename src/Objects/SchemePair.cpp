@@ -2,7 +2,7 @@
 #include "SchemeNull.hpp"
 #include <typeinfo>
 
-SchemePair::SchemePair(SchemeBasicObject *first, SchemeBasicObject *second) {
+SchemePair::SchemePair(SchemeObject *first, SchemeObject *second) {
     this->m_first=first;
     this->m_second=second;
 }
@@ -11,19 +11,19 @@ SchemePair::~SchemePair() {
     // empty
 }
 
-SchemeBasicObject* SchemePair::getFirst() {
+SchemeObject* SchemePair::getFirst() {
     return this->m_first;
 }
 
-SchemeBasicObject* SchemePair::getSecond() {
+SchemeObject* SchemePair::getSecond() {
     return this->m_second;
 }
 
-void SchemePair::setFirst(SchemeBasicObject *f) {
+void SchemePair::setFirst(SchemeObject *f) {
     this->m_first=f;
 }
 
-void SchemePair::setSecond(SchemeBasicObject *s) {
+void SchemePair::setSecond(SchemeObject *s) {
     this->m_second=s;
 }
 
@@ -44,7 +44,7 @@ string SchemePair::print() const {
     return printedLine;
 }
 
-bool equalSchemePairs(const SchemeBasicObject* first, const SchemeBasicObject* second) {
+bool equalSchemePairs(const SchemeObject* first, const SchemeObject* second) {
     if (first == second) {
         return true;
     } else if (typeid(*first) != typeid(*second)) {
@@ -53,7 +53,7 @@ bool equalSchemePairs(const SchemeBasicObject* first, const SchemeBasicObject* s
     return first->equalsTo(*second);
 }
 
-bool SchemePair::equalsTo(const SchemeBasicObject& basicObject) const{
+bool SchemePair::equalsTo(const SchemeObject& basicObject) const{
     if (typeid(*this).name() != typeid(basicObject).name()) {
         return false;
     }
