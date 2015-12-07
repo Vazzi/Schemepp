@@ -9,15 +9,20 @@ using std::string;
 
 class SchemeObject;
 
+typedef map<string, SchemeObject*> VariablesMap;
+
 class Environment {
     public:
         Environment(Environment* parent=0);
         ~Environment();
 
-        void defineVariable(string name, SchemeObject* object);
+        void defineVariable(const string& name, SchemeObject* value);
+        SchemeObject* setVariable(const string& name, SchemeObject* value);
+        SchemeObject* getVariable(const string& name);
+
     private:
         Environment* m_parent;
-        map<string, SchemeObject*> m_variables;
+        VariablesMap m_variables;
 };
 
 #endif /* ifndef __ENVIRONMENT_HPP__ */

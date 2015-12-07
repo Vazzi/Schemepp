@@ -10,6 +10,34 @@ Environment::~Environment() {
     // empty
 }
 
-void Environment::defineVariable(string name, SchemeObject* object) {
-    // TODO: Implement
+void Environment::defineVariable(const string& name, SchemeObject* value) {
+    m_variables[name] = value;
 }
+
+SchemeObject* Environment::setVariable(const string& name, SchemeObject* value) {
+    VariablesMap::const_iterator it = m_variables.find(name);
+    if (it == m_variables.end()) {
+        if (m_parent == NULL) {
+            return 0;
+        } else {
+            return m_parent->setVariable(name, value);
+        }
+    } else {
+        m_variables[name] = value;
+        return value;
+    }
+}
+
+SchemeObject* Environment::getVariable(const string& name) {
+    VariablesMap::const_iterator it = m_variables.find(name);
+    if (it == m_variables.end()) {
+        if (m_parent == NULL) {
+            return 0;
+        } else {
+            return m_parent->getVariable(name);
+        }
+    } else {
+        return it->second;
+    }
+}
+
