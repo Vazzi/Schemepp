@@ -3,8 +3,8 @@
 #include "Bytecode/Deserialization.hpp"
 #include "Bytecode/DeserializationError.hpp"
 #include "Objects/SchemeCodeObject.hpp"
-#include "VirtualMachine.hpp"
-#include "VirtualMachineError.hpp"
+#include "VM/VirtualMachine.hpp"
+#include "VM/VirtualMachineError.hpp"
 
 using std::string;
 using std::cerr;
