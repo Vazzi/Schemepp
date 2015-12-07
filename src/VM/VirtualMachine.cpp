@@ -125,12 +125,20 @@ void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
-    (void)instrArg;
-    // TODO: Implement
+    assert(!m_valuesStack.empty() && "Values stack is empty");
+    assert(instrArg < m_currFrame.codeObject->variableNames.size()
+            && "Variables name offset out of bounds");
+
+    SchemeObject* value = m_valuesStack.top();
+    m_valuesStack.pop();
+    string name = m_currFrame.codeObject->variableNames[instrArg];
+    m_currFrame.env->defineVariable(name, value);
 }
 
 void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
-    assert(instrArg < m_currFrame.codeObject->constants.size() && "Constant offset is out of bounds");
+    assert(instrArg < m_currFrame.codeObject->constants.size()
+            && "Constant offset is out of bounds");
+
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
     SchemeCodeObject* func = dynamic_cast<SchemeCodeObject*>(value);
     // TODO: Implement Scheme Function
