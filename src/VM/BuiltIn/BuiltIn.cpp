@@ -6,6 +6,9 @@
 #include <functional>
 
 using std::plus;
+using std::minus;
+using std::multiplies;
+using std::divides;
 // TODO: Define and implement built-in functions
 // car, cdr, +, -, ...
 
@@ -46,13 +49,13 @@ static SchemeObject* builtInPlus(BuiltInArgs& args){
    return builtInArithmeticOperation("+", args, plus<int>());
 }
 static SchemeObject* builtInMinus(BuiltInArgs& args){
-    // TODO
+    return builtInArithmeticOperation("-", args, minus<int>());
 }
 static SchemeObject* builrInMul(BuiltInArgs& args){
-    // TODO
+   return builtInArithmeticOperation("*", args, multiplies<int>());
 }
 static SchemeObject* builrInQuot(BuiltInArgs& args){
-    // TODO
+    return builtInArithmeticOperation("/", args, divides<int>());
 }
 static SchemeObject* builtInCar(BuiltInArgs& args){
     // TODO
@@ -68,11 +71,11 @@ BuiltInMap mapOfAllBuiltIns() {
     BuiltInMap functions;
 
     functions["+"] = builtInPlus;
-  /*
-    functions["-"] = builtInMinus;
+    functions["-"] = builtInMinus;   
     functions["*"] = builrInMul;
     functions["/"] = builrInQuot;
     
+    /*
     functions["car"] = builtInCar;
     functions["cdr"] = builtInCdr;   
     functions["cons"] = builtInCons;
