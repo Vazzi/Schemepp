@@ -49,7 +49,7 @@ Environment* VirtualMachine::createGlobalEnvironment() {
     for (BuiltInMap::const_iterator it = builtIns.begin();
             it != builtIns.end(); ++it) {
         SchemeObject* func = new BuiltInFunction(it->first, it->second);
-        m_currFrame.env->defineVariable(it->first, func);
+        env->defineVariable(it->first, func);
     }
 
     return env;
