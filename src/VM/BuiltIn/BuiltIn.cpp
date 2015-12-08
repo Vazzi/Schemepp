@@ -1,28 +1,66 @@
 #include "BuiltIn.hpp"
+#include "BuiltInError.hpp"
 #include "Objects/SchemePair.hpp"
+#include "Objects/SchemeNumber.hpp"
+#include <iostream>
+#include <functional>
 
+using std::plus;
 // TODO: Define and implement built-in functions
 // car, cdr, +, -, ...
 
-SchemeObject* builtInPlus(BuiltInArgs& args){
+void builtInVerify(bool condition, const string& message){
+    if(!condition){
+        throw BuiltInError(message);
+    }
+}
+
+// Kontrola - jedna se opravdu o danu typ
+template<class T>
+T* builtInVerifyType(SchemeObject* arg, string message){
+    T* tmpArg= dynamic_cast<T*>(arg);
+    
+    if(!tmpArg){
+        throw BuiltInError(message);
+    }
+    return tmpArg;
+}
+
+// Volba aritmeticke operace
+template<class ArithmeticOperation>
+static SchemeObject* builtInArithmeticOperation(string name, BuiltInArgs& args, ArithmeticOperation func){
+    string errorMsg = "Arithmetic operation " + name + " expect number";  
+    builtInVerify(args.size() > 0, errorMsg);  
+    SchemeNumber* firstArg = builtInVerifyType<SchemeNumber>(args[0],errorMsg);    
+    int result = firstArg->getValue();
+    
+    for(BuiltInArgs::iterator argIterator = args.begin() + 1 ; argIterator != args.end(); ++argIterator){
+        SchemeNumber* nextArgument= builtInVerifyType<SchemeNumber>(*argIterator,errorMsg);
+        result = func(result, nextArgument->getValue());
+    }
+    return new SchemeNumber(result);
+
+}
+
+static SchemeObject* builtInPlus(BuiltInArgs& args){
+   return builtInArithmeticOperation("+", args, plus<int>());
+}
+static SchemeObject* builtInMinus(BuiltInArgs& args){
     // TODO
 }
-SchemeObject* builtInMinus(BuiltInArgs& args){
+static SchemeObject* builrInMul(BuiltInArgs& args){
     // TODO
 }
-SchemeObject* builrInMul(BuiltInArgs& args){
+static SchemeObject* builrInQuot(BuiltInArgs& args){
     // TODO
 }
-SchemeObject* builrInQuot(BuiltInArgs& args){
+static SchemeObject* builtInCar(BuiltInArgs& args){
     // TODO
 }
-SchemeObject* builtInCar(BuiltInArgs& args){
+static SchemeObject* builtInCdr(BuiltInArgs& args){
     // TODO
 }
-SchemeObject* builtInCdr(BuiltInArgs& args){
-    // TODO
-}
-SchemeObject* builtInCons(BuiltInArgs& args){
+static SchemeObject* builtInCons(BuiltInArgs& args){
     // TODO: verifying
     return new SchemePair(args[0],args[1]);
 }
@@ -30,6 +68,7 @@ BuiltInMap mapOfAllBuiltIns() {
     BuiltInMap functions;
 
     functions["+"] = builtInPlus;
+  /*
     functions["-"] = builtInMinus;
     functions["*"] = builrInMul;
     functions["/"] = builrInQuot;
@@ -37,7 +76,8 @@ BuiltInMap mapOfAllBuiltIns() {
     functions["car"] = builtInCar;
     functions["cdr"] = builtInCdr;   
     functions["cons"] = builtInCons;
-   
+   */
+    
     // TODO: Map built-in functions   
     /*        
         functions['eq?'] = builtInEq;
