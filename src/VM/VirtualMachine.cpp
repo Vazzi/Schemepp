@@ -7,6 +7,7 @@
 #include "BuiltIn/BuiltInFunction.hpp"
 #include "VirtualMachineError.hpp"
 #include <cassert>
+#include <cstdio>
 
 VirtualMachine::VirtualMachine() {
     m_currFrame.codeObject = 0;
