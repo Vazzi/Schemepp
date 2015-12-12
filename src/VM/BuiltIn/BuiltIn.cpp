@@ -1,11 +1,11 @@
 #include "BuiltIn.hpp"
 
 #include "BuiltInError.hpp"
-#include "Objects/SchemePair.hpp"
-#include "Objects/SchemeNumber.hpp"
-#include "Objects/SchemeBool.hpp"
-#include "Objects/SchemeSymbol.hpp"
-#include "Objects/SchemeNull.hpp"
+#include "../../Objects/SchemePair.hpp"
+#include "../../Objects/SchemeNumber.hpp"
+#include "../../Objects/SchemeBool.hpp"
+#include "../../Objects/SchemeSymbol.hpp"
+#include "../../Objects/SchemeNull.hpp"
 #include <iostream>
 #include <functional>
 #include <sstream>
@@ -33,7 +33,7 @@ void builtInVerifyCondition(bool condition,const string& message) {
 template<class T>
 T* builtInVerifyType(SchemeObject* arg, string message) {
     T* tmpArg= dynamic_cast<T*>(arg);
-    
+
     if (!tmpArg) {
         throw BuiltInError(message);
     }
@@ -45,17 +45,17 @@ static void builtInVerifyNumberArg(BuiltInArgs& args, unsigned number, const str
 
 template<class ComparisonOperation>
 static SchemeObject* builtInComparisonOperation(string name, BuiltInArgs& args, ComparisonOperation func){
-    string errorMsg = "Comparison operation " + name + " expect number";  
-    builtInVerifyCondition(args.size() > 0, "expet arguments");  
-    SchemeNumber* firstArg = builtInVerifyType<SchemeNumber>(args[0],errorMsg);    
-  
+    string errorMsg = "Comparison operation " + name + " expect number";
+    builtInVerifyCondition(args.size() > 0, "expet arguments");
+    SchemeNumber* firstArg = builtInVerifyType<SchemeNumber>(args[0],errorMsg);
+
     for (BuiltInArgs::iterator argIterator = args.begin() + 1; argIterator != args.end(); ++argIterator) {
         SchemeNumber* nextArgument = builtInVerifyType<SchemeNumber>(*argIterator,errorMsg);
         if (func(firstArg->getValue(), nextArgument->getValue())) {
             firstArg = nextArgument;
         } else {
             return new SchemeBool(false);
-        }      
+        }
     }
     return new SchemeBool(true);
 }
@@ -63,11 +63,11 @@ static SchemeObject* builtInComparisonOperation(string name, BuiltInArgs& args, 
 // Volba aritmeticke operace
 template<class ArithmeticOperation>
 static SchemeObject* builtInArithmeticOperation(string name, BuiltInArgs& args, ArithmeticOperation func) {
-    string errorMsg = "Arithmetic operation " + name + " expect number";  
-    builtInVerifyCondition(args.size() > 0, errorMsg);  
-    SchemeNumber* firstArg = builtInVerifyType<SchemeNumber>(args[0], errorMsg);    
+    string errorMsg = "Arithmetic operation " + name + " expect number";
+    builtInVerifyCondition(args.size() > 0, errorMsg);
+    SchemeNumber* firstArg = builtInVerifyType<SchemeNumber>(args[0], errorMsg);
     int result = firstArg->getValue();
-    
+
     for (BuiltInArgs::iterator argIterator = args.begin() + 1 ; argIterator != args.end(); ++argIterator) {
         SchemeNumber* nextArgument = builtInVerifyType<SchemeNumber>(*argIterator, errorMsg);
         result = func(result, nextArgument->getValue());
@@ -104,11 +104,11 @@ static SchemeObject* builtInCadr(BuiltInArgs& args) {
     builtInVerifyNumberArg(args, 1, "cadr");
     string errorMsg = "cadr expect pair";
     SchemePair *pair = builtInVerifyType<SchemePair>(args[0],errorMsg);
-    SchemePair *next_pair = builtInVerifyType<SchemePair>(pair->getSecond(),errorMsg + "in second part of pair");   
+    SchemePair *next_pair = builtInVerifyType<SchemePair>(pair->getSecond(),errorMsg + "in second part of pair");
     return next_pair->getFirst();
 }
 static SchemeObject* builtInCons(BuiltInArgs& args) {
-    builtInVerifyNumberArg(args, 2, "cons");    
+    builtInVerifyNumberArg(args, 2, "cons");
     return new SchemePair(args[0], args[1]);
 }
 
@@ -153,10 +153,10 @@ static SchemeObject* builtInIsEqual(BuiltInArgs& args) {
     builtInVerifyNumberArg(args, 2, "eq?");
     SchemeObject* first = args[0];
     SchemeObject* second = args[1];
-    
+
     if (dynamic_cast<SchemePair*>(first) && dynamic_cast<SchemePair*>(second)) {
         return new SchemeBool(first == second);
-    } else {    
+    } else {
         return new SchemeBool(equalObjects(first, second));
     }
 }
@@ -180,41 +180,41 @@ static SchemeObject* builtInLessEq(BuiltInArgs& args) {
     return builtInComparisonOperation("<=", args, less_equal<int>());
 }
 
-static SchemeObject* builtInList(BuiltInArgs& args) { 
+static SchemeObject* builtInList(BuiltInArgs& args) {
     SchemeObject *list = new SchemeNull();
-    
+
     for (BuiltInArgs::reverse_iterator argIterator = args.rbegin(); argIterator != args.rend(); ++argIterator) {
         list = new SchemePair(*argIterator, list);
-    }  
+    }
     return list;
 }
 BuiltInMap mapOfAllBuiltIns() {
     BuiltInMap functions;
 
     functions["+"] = builtInPlus;
-    functions["-"] = builtInMinus;   
+    functions["-"] = builtInMinus;
     functions["*"] = builrInMul;
     functions["/"] = builrInQuot;
-    
-    functions["car"] = builtInCar;   
-    functions["cdr"] = builtInCdr;   
-    functions["cadr"] = builtInCadr;  
+
+    functions["car"] = builtInCar;
+    functions["cdr"] = builtInCdr;
+    functions["cadr"] = builtInCadr;
     functions["cons"] = builtInCons;
-    
+
     functions["number?"] = builtInIsNumber;
     functions["symbol?"] = builtInIsSymbol;
     functions["zero?"] = builtInIsZero;
     functions["pair?"] = builtInIsPair;
-    functions["null?"] = builtInIsNull;  
+    functions["null?"] = builtInIsNull;
     functions["eq?"] = builtInIsEqual;
-    
+
     functions["="] = builtInEqTo;
     functions[">"] = builtInGreater;
     functions["<"] = builtInLess;
     functions[">="] = builtInGreaterEq;
     functions["<="] = builtInLessEq;
-    
+
     functions["list"] = builtInList;
-      
+
     return functions;
 }
