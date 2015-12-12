@@ -196,28 +196,28 @@ static SchemeObject* builtInAnd(BuiltInArgs& args) {
     if (args.size() < 1) {
         return new SchemeBool(true);
     }
-    for (BuiltInArgs::iterator argIterator = args.begin() + 1 ; argIterator != args.end(); ++argIterator) {
+    for (BuiltInArgs::iterator argIterator = args.begin(); argIterator != args.end(); ++argIterator) {
         SchemeBool* sb = dynamic_cast<SchemeBool*>(*argIterator);
 
-        if(sb && !sb->getValue()) {
+        if (sb && !sb->getValue()) {
             return new SchemeBool(false);
         }
     }
-     return args[args.size() - 1];
+    return new SchemeBool(true);
 }
 
 static SchemeObject* builtInOr(BuiltInArgs& args) {
     if (args.size() < 1) {
         return new SchemeBool(false);
     }
-    for (BuiltInArgs::iterator argIterator = args.begin() + 1 ; argIterator != args.end(); ++argIterator) {
+    for (BuiltInArgs::iterator argIterator = args.begin(); argIterator != args.end(); ++argIterator) {
         SchemeBool* sb = dynamic_cast<SchemeBool*>(*argIterator);
 
-        if(sb && sb->getValue()) {
-            return sb;
+        if (sb && sb->getValue()) {
+            return new SchemeBool(true);
         }
     }
-    return args[args.size() - 1];
+    return new SchemeBool(false);
 }
 
 static SchemeObject* builtInWrite(BuiltInArgs& args) {
