@@ -213,11 +213,15 @@ static SchemeObject* builtInNewLine(BuiltInArgs& args) {
 }
 
 void setBuiltInOutFile(FILE* file) {
-    BUILTIN_inFile = file;
+    if (file) {
+        BUILTIN_outFile = file;
+    }
 }
 
 void setBuiltInInFile(FILE* file) {
-    BUILTIN_outFile = file;
+    if (file) {
+        BUILTIN_inFile = file;
+    }
 }
 
 void resetFiles() {
