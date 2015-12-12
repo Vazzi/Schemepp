@@ -2,6 +2,7 @@
 
 #include "../Objects/SchemeCodeObject.hpp"
 #include "../Objects/SchemeBool.hpp"
+#include "../Objects/SchemeFunction.hpp"
 #include "Environment.hpp"
 #include "BuiltIn/BuiltIn.hpp"
 #include "BuiltIn/BuiltInFunction.hpp"
@@ -167,8 +168,7 @@ void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
 
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
     SchemeCodeObject* func = dynamic_cast<SchemeCodeObject*>(value);
-    // TODO: Implement Scheme Function
-    //m_valuesStack.push(new SchemeFunction(func));
+    m_valuesStack.push(new SchemeFunction(func, m_currFrame.env));
 }
 
 void VirtualMachine::evalPopOP() {
