@@ -205,6 +205,15 @@ static SchemeObject* builtInWrite(BuiltInArgs& args) {
     return new SchemeNull();
 }
 
+static SchemeObject* builtInRead(BuiltInArgs& args) {
+    if (!BUILTIN_inFile) {
+        throw BuiltInError("There is no input file.");
+    }
+    (void) args;
+    // TODO: Implement read line from open file
+    return new SchemeNull();
+}
+
 static SchemeObject* builtInNewLine(BuiltInArgs& args) {
     (void) args;
     string output = "\n";
@@ -259,8 +268,7 @@ BuiltInMap mapOfAllBuiltIns() {
 
     functions["write"] = builtInWrite;
     functions["newline"] = builtInNewLine;
-    // TODO: implement
-    //functions["read"] = builtInRead;
+    functions["read"] = builtInRead;
 
     return functions;
 }
