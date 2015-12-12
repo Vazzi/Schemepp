@@ -5,6 +5,7 @@
 #include "../Objects/SchemeFunction.hpp"
 #include "Environment.hpp"
 #include "BuiltIn/BuiltIn.hpp"
+#include "BuiltIn/BuiltInError.hpp"
 #include "BuiltIn/BuiltInFunction.hpp"
 #include "VirtualMachineError.hpp"
 #include <cassert>
@@ -199,6 +200,56 @@ void VirtualMachine::evalReturnOP() {
 }
 
 void VirtualMachine::evalCallOP(const unsigned int& instrArg) {
-    (void)instrArg;
-    // TODO: Implement
+    SchemeObject* function = m_valuesStack.top();
+    m_valuesStack.pop();
+    vector<SchemeObject*> arguments; // Arguments of the function
+
+    // Count of arguments is in argument of the instruction
+    // Getting the arguments from the stack
+    for (unsigned int i = 0; i < instrArg; i++) {
+        arguments.push_back(m_valuesStack.top());
+        m_valuesStack.pop();
+    }
+    reverse(arguments.begin(), arguments.end());
+
+    // Evaluate function
+    if (BuiltInFunction* func = dynamic_cast<BuiltInFunction*>(function)) {
+        // Built in function
+        try {
+            SchemeObject* returnValue = func->evaluate(arguments);
+            m_valuesStack.push(returnValue);
+        } catch (BuiltInError& err) {
+            throw VirtualMachineError(err.what());
+        }
+    } else if (SchemeFunction* func = dynamic_cast<SchemeFunction*>(function)) {
+        // Function from code
+        // Check if the arguments count is right
+        if (arguments.size() != func->codeObject->args.size()) {
+            char *err = new char;
+            sprintf(err, "Calling function %s with %ld arguments, needed %ld arguments",
+                    func->print().c_str(),
+                    arguments.size(),
+                    func->codeObject->args.size());
+            throw VirtualMachineError(string(err));
+        }
+
+        // Define environment
+        Environment* funcEnv = new Environment(func->env);
+        for (unsigned int i = 0; i < arguments.size(); i++) {
+            string name = func->codeObject->args[i];
+            SchemeObject* value = arguments[i];
+            funcEnv->defineVariable(name, value);
+        }
+
+        // Create new frame for function
+        m_frameStack.push(m_currFrame);
+        ExecutionFrame funcFrame;
+        funcFrame.codeObject = func->codeObject;
+        funcFrame.pc = 0;
+        funcFrame.env = funcEnv;
+        m_currFrame = funcFrame;
+    } else {
+        // There is no function
+        throw VirtualMachineError("Calling of unknown function");
+    }
 }
