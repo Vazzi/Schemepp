@@ -192,6 +192,34 @@ static SchemeObject* builtInList(BuiltInArgs& args) {
     return list;
 }
 
+static SchemeObject* builtInAnd(BuiltInArgs& args) {
+    if (args.size() < 1) {
+        return new SchemeBool(true);
+    }
+    for (BuiltInArgs::iterator argIterator = args.begin() + 1 ; argIterator != args.end(); ++argIterator) {
+        SchemeBool* sb = dynamic_cast<SchemeBool*>(*argIterator);
+
+        if(sb && !sb->getValue()) {
+            return new SchemeBool(false);
+        }
+    }
+     return args[args.size() - 1];
+}
+
+static SchemeObject* builtInOr(BuiltInArgs& args) {
+    if (args.size() < 1) {
+        return new SchemeBool(false);
+    }
+    for (BuiltInArgs::iterator argIterator = args.begin() + 1 ; argIterator != args.end(); ++argIterator) {
+        SchemeBool* sb = dynamic_cast<SchemeBool*>(*argIterator);
+
+        if(sb && sb->getValue()) {
+            return sb;
+        }
+    }
+    return args[args.size() - 1];
+}
+
 static SchemeObject* builtInWrite(BuiltInArgs& args) {
     string output;
 
@@ -303,6 +331,7 @@ BuiltInMap mapOfAllBuiltIns() {
     functions["pair?"] = builtInIsPair;
     functions["null?"] = builtInIsNull;
     functions["eq?"] = builtInIsEqual;
+    functions["eq"] = builtInIsEqual;
 
     functions["="] = builtInEqTo;
     functions[">"] = builtInGreater;
@@ -311,6 +340,8 @@ BuiltInMap mapOfAllBuiltIns() {
     functions["<="] = builtInLessEq;
 
     functions["list"] = builtInList;
+    functions["and"] = builtInAnd;
+    functions["or"] = builtInOr;
 
     functions["write"] = builtInWrite;
     functions["newline"] = builtInNewLine;

@@ -1,0 +1,11 @@
+(defun cdar (lst)
+    (cdr(car lst))
+)
+
+(defun caaar (lst)
+    (car(car(car lst)))
+)
+
+(defun cdaar (lst)
+    (cdr(car(car lst)))
+)
