@@ -31,6 +31,7 @@ SchemeCodeObject* Deserialization::deserializeByteCode(const string& fileName) {
         throw DeserializationError("Invalid bytecode. First word is not correct.");
     }
 
+    nextByteMatchType(TypeCodeobject);
     return this->readCodeObject();
 }
 
@@ -99,8 +100,9 @@ SchemeObject* Deserialization::readBasicObject() {
             return this->readNumber();
         case TypePair:
             return this->readPair();
-        case TypeSequence:
         case TypeCodeobject:
+            return this->readCodeObject();
+        case TypeSequence:
         case TypeInstr:
         case TypeString:
             char *err = new char;
@@ -111,7 +113,6 @@ SchemeObject* Deserialization::readBasicObject() {
 }
 
 SchemeCodeObject* Deserialization::readCodeObject() {
-    nextByteMatchType(TypeCodeobject);
     SchemeCodeObject* object = new SchemeCodeObject();
     object->name = this->readString();
 
