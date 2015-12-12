@@ -188,6 +188,27 @@ static SchemeObject* builtInList(BuiltInArgs& args) {
     }
     return list;
 }
+
+static SchemeObject* builtInWrite(BuiltInArgs& args) {
+    string output;
+
+    for (BuiltInArgs::const_iterator it = args.begin(); it != args.end(); it++) {
+        output += (*it)->print();
+        if (it != args.end() - 1) {
+            output += " ";
+        }
+    }
+    printf("%s", output.c_str());
+
+    return new SchemeNull();
+}
+
+static SchemeObject* builtInNewLine(BuiltInArgs& args) {
+    (void) args;
+    printf("\n");
+    return new SchemeNull();
+}
+
 BuiltInMap mapOfAllBuiltIns() {
     BuiltInMap functions;
 
@@ -215,6 +236,9 @@ BuiltInMap mapOfAllBuiltIns() {
     functions["<="] = builtInLessEq;
 
     functions["list"] = builtInList;
+
+    functions["write"] = builtInWrite;
+    functions["newline"] = builtInNewLine;
 
     return functions;
 }
