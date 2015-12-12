@@ -21,7 +21,6 @@ VirtualMachine::~VirtualMachine() {
     delete m_currFrame.env;
 }
 
-
 void VirtualMachine::run(SchemeCodeObject* codeObject) {
     if (codeObject == NULL) {
         return;
@@ -42,6 +41,14 @@ void VirtualMachine::run(SchemeCodeObject* codeObject) {
         // Evaluate instruction
         this->evalInstruction(instr);
     }
+}
+
+void VirtualMachine::setInputFile(FILE* file) {
+    setBuiltInInFile(file);
+}
+
+void VirtualMachine::setOutputFile(FILE* file) {
+    setBuiltInOutFile(file);
 }
 
 Environment* VirtualMachine::createGlobalEnvironment() {

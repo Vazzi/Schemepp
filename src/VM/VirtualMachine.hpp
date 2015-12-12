@@ -2,6 +2,7 @@
 #define __VIRTUAL_MACHINE_HPP__
 
 #include <stack>
+#include <iostream>
 
 class SchemeCodeObject;
 class SchemeObject;
@@ -10,6 +11,7 @@ class Environment;
 struct Instruction;
 
 using std::stack;
+using std::string;
 
 struct ExecutionFrame {
     SchemeCodeObject* codeObject;
@@ -23,6 +25,9 @@ class VirtualMachine {
         ~VirtualMachine();
 
         void run(SchemeCodeObject* bytecode);
+
+        void setInputFile(FILE* file);
+        void setOutputFile(FILE* file);
     private:
         stack<ExecutionFrame> m_frameStack;
         stack<SchemeObject*> m_valuesStack;

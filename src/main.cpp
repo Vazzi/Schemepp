@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
     try {
         VirtualMachine* vm = new VirtualMachine();
         vm->run(code);
+        delete vm;
     } catch (VirtualMachineError& err) {
         cerr << "Virtual Machine error: " << err.what() << "\n";
         return 1;

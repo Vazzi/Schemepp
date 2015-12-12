@@ -15,6 +15,9 @@ typedef vector<SchemeObject*> BuiltInArgs;
 typedef SchemeObject* (*BuiltInFunc)(BuiltInArgs& args);
 typedef map<string, BuiltInFunc> BuiltInMap;
 
+void setBuiltInOutFile(FILE* file);
+void setBuiltInInFile(FILE* file);
+
 BuiltInMap mapOfAllBuiltIns();
 
 #endif /* ifndef __BUILT_IN_HPP__ */

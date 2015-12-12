@@ -23,6 +23,9 @@ using std::greater_equal;
 using std::less_equal;
 using std::string;
 
+FILE* BUILTIN_inFile = NULL;
+FILE* BUILTIN_outFile = stdout;
+
 void builtInVerifyCondition(bool condition,const string& message) {
     if(!condition) {
         throw BuiltInError(message);
@@ -198,15 +201,28 @@ static SchemeObject* builtInWrite(BuiltInArgs& args) {
             output += " ";
         }
     }
-    printf("%s", output.c_str());
-
+    fputs(output.c_str(), BUILTIN_outFile);
     return new SchemeNull();
 }
 
 static SchemeObject* builtInNewLine(BuiltInArgs& args) {
     (void) args;
-    printf("\n");
+    string output = "\n";
+    fputs(output.c_str(), BUILTIN_outFile);
     return new SchemeNull();
+}
+
+void setBuiltInOutFile(FILE* file) {
+    BUILTIN_inFile = file;
+}
+
+void setBuiltInInFile(FILE* file) {
+    BUILTIN_outFile = file;
+}
+
+void resetFiles() {
+    BUILTIN_inFile = NULL;
+    BUILTIN_outFile = stdout;
 }
 
 BuiltInMap mapOfAllBuiltIns() {
@@ -239,6 +255,8 @@ BuiltInMap mapOfAllBuiltIns() {
 
     functions["write"] = builtInWrite;
     functions["newline"] = builtInNewLine;
+    // TODO: implement
+    //functions["read"] = builtInRead;
 
     return functions;
 }
