@@ -206,11 +206,57 @@ static SchemeObject* builtInWrite(BuiltInArgs& args) {
 }
 
 static SchemeObject* builtInRead(BuiltInArgs& args) {
-    if (!BUILTIN_inFile) {
+    if (BUILTIN_inFile == NULL) {
         throw BuiltInError("There is no input file.");
     }
-    (void) args;
-    // TODO: Implement read line from open file
+    if (!args.empty()) {
+        throw BuiltInError("Function read does not takes arguments.");
+    }
+
+    char character;
+    string inStr;
+    while (true) {
+        if (fscanf(BUILTIN_inFile, "%c", &character) == 1) {
+            if (character == '\n') { // End of line
+                // End of the line
+                // stop and reset position before end of line
+                fpos_t pos;
+                fgetpos(BUILTIN_inFile, &pos);
+                pos--;
+                fsetpos(BUILTIN_inFile, &pos);
+                break;
+            } else if (character == 32) { // Space
+                break;
+            } else if (character > 47 && character < 58) { // Number
+                inStr += character;
+            } else {
+                throw BuiltInError("Error while reading file.");
+            }
+        } else {
+            break;
+        }
+    }
+    if (inStr.empty()) {
+        return new SchemeNull();
+    }
+
+    // Convert to integer
+    int number;
+    std::istringstream convert(inStr);
+    if (!(convert >> number)) {
+        throw BuiltInError("Error while reading file.");
+    }
+    return new SchemeNumber(number);
+}
+
+static SchemeObject* builtInFileNextLine(BuiltInArgs& args) {
+    if (BUILTIN_inFile == NULL) {
+        throw BuiltInError("There is no input file.");
+    }
+    if (!args.empty()) {
+        throw BuiltInError("Function read does not takes arguments.");
+    }
+    fscanf(BUILTIN_inFile, "\n");
     return new SchemeNull();
 }
 
@@ -269,6 +315,7 @@ BuiltInMap mapOfAllBuiltIns() {
     functions["write"] = builtInWrite;
     functions["newline"] = builtInNewLine;
     functions["read"] = builtInRead;
+    functions["fileNextLine"] = builtInFileNextLine;
 
     return functions;
 }
