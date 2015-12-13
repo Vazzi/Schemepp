@@ -21,6 +21,14 @@ Tento compiler neumí pracovat s řetězci a tak jsme zvolili program, jenž ře
 * src ... zdrojové kódy Schemepp
 * CMakeLists.txt ... specifikace pro cmake
 * Readme.md ... readme
+* runProgram.sh ... linux skript jenž všechno spustí a udělá za nás
+
+
+### runProgram.sh
+
+Pomocí tohoto scriptu se provede kompilace Schemepp a zkompiluje se problem.scm. Následně se spustí VM s daným problémem.
+
+Provedou se tedy všechny potřebné kroky pro ukázku, že program správně běží.
 
 ## Kompilace Schemepp
 
@@ -46,14 +54,23 @@ $ ./Schemepp <bytecode.bobc> <vystupni_soubor> -i <vstupni_soubor>
 Ve složce scheme:
 
 ```sh
-$ ./python3 compile.py problem.scm
+$ python3 compile.py problem.scm
 ```
 
 Vytvoří .bobc soubor jenž zpracuje VM
 
 ## Spuštění příkladu
 
+Lze provést spuštěním skriptu runProgram.sh
+
+```sh
+$ sh runProgram.sh
+```
+
+nebo manuálně:
+
 1. Vygenerovat .bobc soubor pomocí kompilátoru (viz předchozí bod).
 2. Zkopírovat vygenerovaný problem.bobc a input.dat soubor do složky bin
 3. Spustit: Schemepp problem.bobc -i input.dat
 4. VM vypíše do konzole výsledek
+
