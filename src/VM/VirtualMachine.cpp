@@ -8,7 +8,6 @@
 #include "BuiltIn/BuiltInError.hpp"
 #include "BuiltIn/BuiltInFunction.hpp"
 #include "VirtualMachineError.hpp"
-#include <cassert>
 #include <cstdio>
 
 VirtualMachine::VirtualMachine() {
@@ -120,17 +119,11 @@ void VirtualMachine::evalInstruction(const Instruction& instr) {
 }
 
 void VirtualMachine::evalConstOP(const unsigned int& instrArg) {
-    assert(instrArg < m_currFrame.codeObject->constants.size()
-            && "Constant index out of bounds");
-
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
     m_valuesStack.push(value);
 }
 
 void VirtualMachine::evalLoadVarOP(const unsigned int& instrArg) {
-    assert(instrArg < m_currFrame.codeObject->variableNames.size()
-            && "Variables name index out of bounds");
-
     string name = m_currFrame.codeObject->variableNames[instrArg];
     SchemeObject* value = m_currFrame.env->getVariable(name);
     if (value == 0) {
@@ -143,10 +136,6 @@ void VirtualMachine::evalLoadVarOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
-    assert(!m_valuesStack.empty() && "Values stack is empty");
-    assert(instrArg < m_currFrame.codeObject->variableNames.size()
-            && "Variables name index out of bounds");
-
     SchemeObject* value = m_valuesStack.top();
     m_valuesStack.pop();
     string name = m_currFrame.codeObject->variableNames[instrArg];
@@ -160,10 +149,6 @@ void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
-    assert(!m_valuesStack.empty() && "Values stack is empty");
-    assert(instrArg < m_currFrame.codeObject->variableNames.size()
-            && "Variables name index out of bounds");
-
     SchemeObject* value = m_valuesStack.top();
     m_valuesStack.pop();
     string name = m_currFrame.codeObject->variableNames[instrArg];
@@ -171,9 +156,6 @@ void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
-    assert(instrArg < m_currFrame.codeObject->constants.size()
-            && "Constant index out of bounds");
-
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
     SchemeCodeObject* func = dynamic_cast<SchemeCodeObject*>(value);
     m_valuesStack.push(new SchemeFunction(func, m_currFrame.env));
@@ -190,8 +172,6 @@ void VirtualMachine::evalJumpOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
-    assert(!m_valuesStack.empty() && "Values stack is empty");
-
     SchemeBool* predicate = dynamic_cast<SchemeBool*>(m_valuesStack.top());
     m_valuesStack.pop();
     if (predicate && !predicate->getValue()) {
@@ -200,8 +180,6 @@ void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalReturnOP() {
-    assert(!m_frameStack.empty() && "Frame stack is empty");
-
     m_currFrame = m_frameStack.top();
     m_frameStack.pop();
 }
