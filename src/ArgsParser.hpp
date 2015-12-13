@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <map>
-
+#include <cstdio>
 using std::runtime_error;
 using std::string;
 using std::map;

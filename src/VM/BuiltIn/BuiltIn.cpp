@@ -11,6 +11,7 @@
 #include <sstream>
 #include <typeinfo>
 #include <string>
+#include <cstdio>
 
 using std::plus;
 using std::minus;
@@ -240,18 +241,17 @@ static SchemeObject* builtInRead(BuiltInArgs& args) {
     if (!args.empty()) {
         throw BuiltInError("Function read does not takes arguments.");
     }
-
+ 
     char character;
     string inStr;
     while (true) {
         if (fscanf(BUILTIN_inFile, "%c", &character) == 1) {
             if (character == '\n') { // End of line
-                // End of the line
+                // End of the line '\n'
                 // stop and reset position before end of line
-                fpos_t pos;
-                fgetpos(BUILTIN_inFile, &pos);
-                pos--;
-                fsetpos(BUILTIN_inFile, &pos);
+                fseek(BUILTIN_inFile, -1, SEEK_CUR);
+                break;
+            } else if (character == '\r') { // End of line '\r\n'
                 break;
             } else if (character == 32) { // Space
                 break;
@@ -267,7 +267,7 @@ static SchemeObject* builtInRead(BuiltInArgs& args) {
     if (inStr.empty()) {
         return new SchemeNull();
     }
-
+ 
     // Convert to integer
     int number;
     std::istringstream convert(inStr);
@@ -284,7 +284,19 @@ static SchemeObject* builtInFileNextLine(BuiltInArgs& args) {
     if (!args.empty()) {
         throw BuiltInError("Function read does not takes arguments.");
     }
-    fscanf(BUILTIN_inFile, "\n");
+    char character;
+    while (true) {
+        if (fscanf(BUILTIN_inFile, "%c", &character) == 1) {
+            if (character == '\n') {
+                break;
+            }
+        } else if (feof(BUILTIN_inFile)) {
+            break;
+        } else {
+            throw BuiltInError("Error while reading file.");
+        }
+    }
+ 
     return new SchemeNull();
 }
 

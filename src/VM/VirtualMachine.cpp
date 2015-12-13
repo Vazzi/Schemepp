@@ -9,7 +9,7 @@
 #include "BuiltIn/BuiltInFunction.hpp"
 #include "VirtualMachineError.hpp"
 #include <cstdio>
-
+#include <algorithm>
 VirtualMachine::VirtualMachine() {
     m_currFrame.codeObject = 0;
     m_currFrame.pc = 0;

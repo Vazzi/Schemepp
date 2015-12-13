@@ -2,7 +2,7 @@
 #define __SCHEME_CODE_OBJECT_HPP__
 
 #include "SchemeObject.hpp"
-#include "../Bytecode/Bytecode.hpp"
+#include "./../Bytecode/Bytecode.hpp"
 #include <string>
 #include <vector>
 

@@ -5,6 +5,7 @@
 #include "VM/VirtualMachineError.hpp"
 #include "ArgsParser.hpp"
 #include <iostream>
+#include <cstdio>
 
 using std::string;
 using std::cerr;
