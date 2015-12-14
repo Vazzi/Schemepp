@@ -29,3 +29,17 @@ bool equalObjects(const SchemeObject *first, const SchemeObject *second){
         return first->equalsTo(*second);
     }
 }
+
+void SchemeObject::GCMark() {
+    if (!m_isGCMarked) {
+        m_isGCMarked = true;
+    }
+}
+
+void SchemeObject::GCUnMark() {
+    m_isGCMarked = false;
+}
+
+bool SchemeObject::isGCMarked() const {
+    return m_isGCMarked;
+}
