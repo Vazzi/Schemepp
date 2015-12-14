@@ -12,6 +12,9 @@ class SchemeObject {
         virtual bool equalsTo(const SchemeObject& object) const;
         virtual string print() const;
 
+        void* operator new(size_t size);
+        void operator delete(void* p);
+
         // Garbage collector marking
         virtual void GCMark();
         virtual void GCUnMark();

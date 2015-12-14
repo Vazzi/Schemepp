@@ -1,8 +1,9 @@
 #include "SchemeObject.hpp"
+#include "../VM/GarbageCollector.hpp"
 #include <typeinfo>
 #include <iostream>
 
-SchemeObject::SchemeObject() {
+SchemeObject::SchemeObject() : m_isGCMarked(false) {
     // empty
 }
 
@@ -28,6 +29,14 @@ bool equalObjects(const SchemeObject *first, const SchemeObject *second){
     } else {
         return first->equalsTo(*second);
     }
+}
+
+void* SchemeObject::operator new(size_t size) {
+    return TheGarbageCollector::Instance()->allocateObject(size);
+}
+
+void SchemeObject::operator delete(void* pointer) {
+    TheGarbageCollector::Instance()->releaseObject(pointer);
 }
 
 void SchemeObject::GCMark() {

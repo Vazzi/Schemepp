@@ -35,4 +35,6 @@ class GarbageCollector {
         size_t m_totalAllocSize;
 };
 
+typedef GarbageCollector TheGarbageCollector;
+
 #endif /* ifndef __GARBAGE_COLLECTOR_HPP__ */
