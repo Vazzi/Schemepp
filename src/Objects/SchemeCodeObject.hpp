@@ -21,10 +21,10 @@ class SchemeCodeObject : public SchemeObject {
         vector<SchemeObject*> constants;
         vector<Instruction> instructions;
 
-        virtual void GCMarkPointed() {
+        virtual void gc_markPointed() {
             for (vector<SchemeObject*>::iterator it = constants.begin();
                     it != constants.end(); it++) {
-                (*it)->GCMark();
+                (*it)->gc_mark();
             }
         }
 };

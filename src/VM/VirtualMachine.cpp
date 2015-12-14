@@ -58,17 +58,19 @@ void VirtualMachine::setOutputFile(FILE* file) {
 }
 
 
-void VirtualMachine::GCMarkRoots() {
-    m_currFrame.codeObject->GCMark();
-    m_currFrame.env->GCMark();
+void VirtualMachine::gc_markRoots() {
+    m_currFrame.codeObject->gc_mark();
+    m_currFrame.env->gc_mark();
 
-    for (vector<ExecutionFrame>::iterator it = m_frameStack.begin(); it != m_frameStack.end(); it++) {
-        it->codeObject->GCMark();
-        it->env->GCMark();
+    for (vector<ExecutionFrame>::iterator it = m_frameStack.begin();
+            it != m_frameStack.end(); it++) {
+        it->codeObject->gc_mark();
+        it->env->gc_mark();
     }
 
-    for (vector<SchemeObject*>::iterator it = m_valuesStack.begin(); it != m_valuesStack.end(); it++) {
-        (*it)->GCMark();
+    for (vector<SchemeObject*>::iterator it = m_valuesStack.begin();
+            it != m_valuesStack.end(); it++) {
+        (*it)->gc_mark();
     }
 }
 

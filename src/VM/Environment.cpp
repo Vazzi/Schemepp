@@ -42,12 +42,12 @@ SchemeObject* Environment::getVariable(const string& name) {
     }
 }
 
-void Environment::GCMarkPointed() {
+void Environment::gc_markPointed() {
     for (VariablesMap::iterator it = m_variables.begin(); it != m_variables.end(); it++) {
-        it->second->GCMark();
+        it->second->gc_mark();
     }
     if (m_parent) {
-        m_parent->GCMark();
+        m_parent->gc_mark();
     }
 }
 

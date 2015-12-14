@@ -16,13 +16,13 @@ class SchemeObject {
         void operator delete(void* p);
 
         // Garbage collector marking
-        virtual void GCMark();
-        virtual void GCUnMark();
-        virtual bool isGCMarked() const;
-        virtual void GCMarkPointed() {}; // Only for inheriting objects that has some pointers to other objects
+        virtual void gc_mark();
+        virtual void gc_unMark();
+        virtual bool gc_isMarked() const;
+        virtual void gc_markPointed() {}; // Only for inheriting objects that has some pointers to other objects
 
     protected:
-        bool m_isGCMarked;
+        bool m_gc_isMarked;
 };
 
 #endif

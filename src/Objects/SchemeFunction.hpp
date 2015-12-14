@@ -19,7 +19,7 @@ class SchemeFunction : public SchemeObject {
         SchemeCodeObject* codeObject;
         Environment* env;
 
-        virtual void GCMarkPointed();
+        virtual void gc_markPointed();
 };
 
 #endif /* ifndef __SCHEME_FUNCTION_HPP__ */

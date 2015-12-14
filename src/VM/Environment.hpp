@@ -18,7 +18,7 @@ class Environment: public SchemeObject {
         void defineVariable(const string& name, SchemeObject* value);
         SchemeObject* setVariable(const string& name, SchemeObject* value);
         SchemeObject* getVariable(const string& name);
-        virtual void GCMarkPointed();
+        virtual void gc_markPointed();
 
     private:
         Environment* m_parent;

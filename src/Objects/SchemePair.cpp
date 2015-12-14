@@ -64,7 +64,7 @@ bool SchemePair::equalsTo(const SchemeObject& basicObject) const{
     return false;
 }
 
-void SchemePair::GCMarkPointed() {
-    m_first->GCMark();
-    m_second->GCMark();
+void SchemePair::gc_markPointed() {
+    m_first->gc_mark();
+    m_second->gc_mark();
 }

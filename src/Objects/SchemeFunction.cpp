@@ -16,7 +16,7 @@ string SchemeFunction::print() const {
     return "<function " + codeObject->name + ">";
 }
 
-void SchemeFunction::GCMarkPointed() {
-    codeObject->GCMark();
-    env->GCMark();
+void SchemeFunction::gc_markPointed() {
+    codeObject->gc_mark();
+    env->gc_mark();
 }

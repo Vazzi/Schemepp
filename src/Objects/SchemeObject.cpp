@@ -3,7 +3,7 @@
 #include <typeinfo>
 #include <iostream>
 
-SchemeObject::SchemeObject() : m_isGCMarked(false) {
+SchemeObject::SchemeObject() : m_gc_isMarked(false) {
     // empty
 }
 
@@ -39,17 +39,17 @@ void SchemeObject::operator delete(void* pointer) {
     TheGarbageCollector::Instance()->releaseObject(pointer);
 }
 
-void SchemeObject::GCMark() {
-    if (!m_isGCMarked) {
-        m_isGCMarked = true;
-        GCMarkPointed();
+void SchemeObject::gc_mark() {
+    if (!m_gc_isMarked) {
+        m_gc_isMarked = true;
+        gc_markPointed();
     }
 }
 
-void SchemeObject::GCUnMark() {
-    m_isGCMarked = false;
+void SchemeObject::gc_unMark() {
+    m_gc_isMarked = false;
 }
 
-bool SchemeObject::isGCMarked() const {
-    return m_isGCMarked;
+bool SchemeObject::gc_isMarked() const {
+    return m_gc_isMarked;
 }

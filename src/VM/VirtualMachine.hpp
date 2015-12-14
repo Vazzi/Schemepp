@@ -31,7 +31,7 @@ class VirtualMachine {
         void setInputFile(FILE* file);
         void setOutputFile(FILE* file);
 
-        void GCMarkRoots();
+        void gc_markRoots();
 
         size_t gc_sizeLimit;
     private:

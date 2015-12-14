@@ -32,14 +32,14 @@ void GarbageCollector::runClean(size_t sizeLimit) {
         return;
     }
 
-    m_vm->GCMarkRoots();
+    m_vm->gc_markRoots();
 
     list<InMemObject>::iterator it = m_objects.begin();
     while (it != m_objects.end()) {
         SchemeObject* object = it->first;
         size_t objSize = it->second;
-        if (object->isGCMarked()) {
-            object->GCUnMark();
+        if (object->gc_isMarked()) {
+            object->gc_unMark();
             it++;
         } else {
             it = m_objects.erase(it);
