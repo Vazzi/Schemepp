@@ -23,8 +23,7 @@ class GarbageCollector {
 
         void* allocateObject(size_t size);
         void releaseObject(void* pointer);
-        void runClean();
-        void registerObject(SchemeObject* object);
+        void runClean(size_t size);
 
     private:
         static GarbageCollector* s_instance;

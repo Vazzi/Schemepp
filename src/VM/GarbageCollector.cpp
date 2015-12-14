@@ -2,6 +2,8 @@
 
 #include "../Objects/SchemeObject.hpp"
 
+using std::make_pair;
+
 GarbageCollector* GarbageCollector::s_instance = 0;
 
 GarbageCollector::GarbageCollector() :m_totalAllocSize(0) {
@@ -13,23 +15,21 @@ GarbageCollector::~GarbageCollector() {
 }
 
 void* GarbageCollector::allocateObject(size_t size) {
-    (void)size;
-    // TODO: Implement
-    return NULL;
+    void* memory = ::operator new(size);
+    InMemObject object = make_pair(static_cast<SchemeObject*>(memory), size);
+    m_objects.push_back(object);
+    m_totalAllocSize += size;
+    return memory;
 }
 
 void GarbageCollector::releaseObject(void* pointer) {
-    (void)pointer;
-    // TODO: Implement
+    ::operator delete(pointer);
 }
 
-void GarbageCollector::runClean() {
+void GarbageCollector::runClean(size_t size) {
+    if (m_totalAllocSize < size) {
+        return;
+    }
     // TODO: Implement
 }
-
-void GarbageCollector::registerObject(SchemeObject* object) {
-    (void) object;
-    // TODO: Implement
-}
-
 
