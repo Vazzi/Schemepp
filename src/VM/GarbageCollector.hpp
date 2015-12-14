@@ -5,6 +5,7 @@
 #include <list>
 
 class SchemeObject;
+class VirtualMachine;
 
 using std::pair;
 using std::list;
@@ -24,6 +25,7 @@ class GarbageCollector {
         void* allocateObject(size_t size);
         void releaseObject(void* pointer);
         void runClean(size_t size);
+        void registerVM(VirtualMachine* vm);
 
     private:
         static GarbageCollector* s_instance;
@@ -33,6 +35,7 @@ class GarbageCollector {
 
         list<InMemObject> m_objects;
         size_t m_totalAllocSize;
+        VirtualMachine* m_vm;
 };
 
 typedef GarbageCollector TheGarbageCollector;

@@ -8,12 +8,16 @@
 #include "BuiltIn/BuiltInError.hpp"
 #include "BuiltIn/BuiltInFunction.hpp"
 #include "VirtualMachineError.hpp"
+#include "GarbageCollector.hpp"
 #include <cstdio>
 #include <algorithm>
+
 VirtualMachine::VirtualMachine() {
     m_currFrame.codeObject = 0;
     m_currFrame.pc = 0;
     m_currFrame.env = this->createGlobalEnvironment();
+
+    TheGarbageCollector::Instance()->registerVM(this);
 }
 
 VirtualMachine::~VirtualMachine() {
@@ -37,6 +41,9 @@ void VirtualMachine::run(SchemeCodeObject* codeObject) {
         } else {
             break; // Last instruction, we are done
         }
+
+        TheGarbageCollector::Instance()->runClean(32768);
+
         // Evaluate instruction
         this->evalInstruction(instr);
     }
@@ -48,6 +55,21 @@ void VirtualMachine::setInputFile(FILE* file) {
 
 void VirtualMachine::setOutputFile(FILE* file) {
     setBuiltInOutFile(file);
+}
+
+
+void VirtualMachine::GCMarkRoots() {
+    m_currFrame.codeObject->GCMark();
+    m_currFrame.env->GCMark();
+
+    for (vector<ExecutionFrame>::iterator it = m_frameStack.begin(); it != m_frameStack.end(); it++) {
+        it->codeObject->GCMark();
+        it->env->GCMark();
+    }
+
+    for (vector<SchemeObject*>::iterator it = m_valuesStack.begin(); it != m_valuesStack.end(); it++) {
+        (*it)->GCMark();
+    }
 }
 
 Environment* VirtualMachine::createGlobalEnvironment() {
@@ -120,7 +142,7 @@ void VirtualMachine::evalInstruction(const Instruction& instr) {
 
 void VirtualMachine::evalConstOP(const unsigned int& instrArg) {
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
-    m_valuesStack.push(value);
+    m_valuesStack.push_back(value);
 }
 
 void VirtualMachine::evalLoadVarOP(const unsigned int& instrArg) {
@@ -132,12 +154,12 @@ void VirtualMachine::evalLoadVarOP(const unsigned int& instrArg) {
         string text = string(err);
         throw VirtualMachineError(text);
     }
-    m_valuesStack.push(value);
+    m_valuesStack.push_back(value);
 }
 
 void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
-    SchemeObject* value = m_valuesStack.top();
-    m_valuesStack.pop();
+    SchemeObject* value = m_valuesStack.back();
+    m_valuesStack.pop_back();
     string name = m_currFrame.codeObject->variableNames[instrArg];
     SchemeObject* variable = m_currFrame.env->setVariable(name, value);
     if (variable == 0) {
@@ -149,8 +171,8 @@ void VirtualMachine::evalStoreVarOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
-    SchemeObject* value = m_valuesStack.top();
-    m_valuesStack.pop();
+    SchemeObject* value = m_valuesStack.back();
+    m_valuesStack.pop_back();
     string name = m_currFrame.codeObject->variableNames[instrArg];
     m_currFrame.env->defineVariable(name, value);
 }
@@ -158,12 +180,12 @@ void VirtualMachine::evalDefVarOP(const unsigned int& instrArg) {
 void VirtualMachine::evalFunctionOP(const unsigned int& instrArg) {
     SchemeObject* value = m_currFrame.codeObject->constants[instrArg];
     SchemeCodeObject* func = dynamic_cast<SchemeCodeObject*>(value);
-    m_valuesStack.push(new SchemeFunction(func, m_currFrame.env));
+    m_valuesStack.push_back(new SchemeFunction(func, m_currFrame.env));
 }
 
 void VirtualMachine::evalPopOP() {
     if (!m_valuesStack.empty()) {
-        m_valuesStack.pop();
+        m_valuesStack.pop_back();
     }
 }
 
@@ -172,28 +194,28 @@ void VirtualMachine::evalJumpOP(const unsigned int& instrArg) {
 }
 
 void VirtualMachine::evalFJumpOP(const unsigned int& instrArg) {
-    SchemeBool* predicate = dynamic_cast<SchemeBool*>(m_valuesStack.top());
-    m_valuesStack.pop();
+    SchemeBool* predicate = dynamic_cast<SchemeBool*>(m_valuesStack.back());
+    m_valuesStack.pop_back();
     if (predicate && !predicate->getValue()) {
         m_currFrame.pc = instrArg;
     }
 }
 
 void VirtualMachine::evalReturnOP() {
-    m_currFrame = m_frameStack.top();
-    m_frameStack.pop();
+    m_currFrame = m_frameStack.back();
+    m_frameStack.pop_back();
 }
 
 void VirtualMachine::evalCallOP(const unsigned int& instrArg) {
-    SchemeObject* function = m_valuesStack.top();
-    m_valuesStack.pop();
+    SchemeObject* function = m_valuesStack.back();
+    m_valuesStack.pop_back();
     vector<SchemeObject*> arguments; // Arguments of the function
 
     // Count of arguments is in argument of the instruction
     // Getting the arguments from the stack
     for (unsigned int i = 0; i < instrArg; i++) {
-        arguments.push_back(m_valuesStack.top());
-        m_valuesStack.pop();
+        arguments.push_back(m_valuesStack.back());
+        m_valuesStack.pop_back();
     }
     reverse(arguments.begin(), arguments.end());
 
@@ -202,7 +224,7 @@ void VirtualMachine::evalCallOP(const unsigned int& instrArg) {
         // Built in function
         try {
             SchemeObject* returnValue = func->evaluate(arguments);
-            m_valuesStack.push(returnValue);
+            m_valuesStack.push_back(returnValue);
         } catch (BuiltInError& err) {
             throw VirtualMachineError(err.what());
         }
@@ -227,7 +249,7 @@ void VirtualMachine::evalCallOP(const unsigned int& instrArg) {
         }
 
         // Create new frame for function
-        m_frameStack.push(m_currFrame);
+        m_frameStack.push_back(m_currFrame);
         ExecutionFrame funcFrame;
         funcFrame.codeObject = func->codeObject;
         funcFrame.pc = 0;

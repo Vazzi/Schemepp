@@ -1,6 +1,7 @@
 #include "SchemeFunction.hpp"
 
 #include "SchemeCodeObject.hpp"
+#include "../VM/Environment.hpp"
 
 SchemeFunction::SchemeFunction(SchemeCodeObject* codeObject, Environment* env)
     : codeObject(codeObject), env(env) {

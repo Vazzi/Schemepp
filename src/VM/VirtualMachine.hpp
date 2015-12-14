@@ -1,7 +1,7 @@
 #ifndef __VIRTUAL_MACHINE_HPP__
 #define __VIRTUAL_MACHINE_HPP__
 
-#include <stack>
+#include <vector>
 #include <iostream>
 
 class SchemeCodeObject;
@@ -10,7 +10,7 @@ class Environment;
 
 struct Instruction;
 
-using std::stack;
+using std::vector;
 using std::string;
 
 struct ExecutionFrame {
@@ -28,9 +28,11 @@ class VirtualMachine {
 
         void setInputFile(FILE* file);
         void setOutputFile(FILE* file);
+
+        void GCMarkRoots();
     private:
-        stack<ExecutionFrame> m_frameStack;
-        stack<SchemeObject*> m_valuesStack;
+        vector<ExecutionFrame> m_frameStack;
+        vector<SchemeObject*> m_valuesStack; // Can not be stack because we need to iterate (Mark for GC)
         ExecutionFrame m_currFrame;
 
         Environment* createGlobalEnvironment();

@@ -1,6 +1,7 @@
 #include "GarbageCollector.hpp"
 
 #include "../Objects/SchemeObject.hpp"
+#include "VirtualMachine.hpp"
 
 using std::make_pair;
 
@@ -31,6 +32,8 @@ void GarbageCollector::runClean(size_t size) {
         return;
     }
 
+    m_vm->GCMarkRoots();
+
     list<InMemObject>::iterator it = m_objects.begin();
     while (it != m_objects.end()) {
         SchemeObject* object = it->first;
@@ -46,3 +49,6 @@ void GarbageCollector::runClean(size_t size) {
     }
 }
 
+void GarbageCollector::registerVM(VirtualMachine* vm) {
+    m_vm = vm;
+}
