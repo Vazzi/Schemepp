@@ -17,6 +17,8 @@ class SchemePair : public SchemeObject{
 
         string print() const;
         bool equalsTo(const SchemeObject& basicObject) const;
+        virtual void GCMarkPointed();
+
     private:
         SchemeObject *m_first;
         SchemeObject *m_second;

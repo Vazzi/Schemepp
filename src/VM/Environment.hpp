@@ -3,15 +3,14 @@
 
 #include <string>
 #include <map>
+#include "../Objects/SchemeObject.hpp"
 
 using std::map;
 using std::string;
 
-class SchemeObject;
-
 typedef map<string, SchemeObject*> VariablesMap;
 
-class Environment {
+class Environment: public SchemeObject {
     public:
         Environment(Environment* parent=0);
         ~Environment();
@@ -19,6 +18,7 @@ class Environment {
         void defineVariable(const string& name, SchemeObject* value);
         SchemeObject* setVariable(const string& name, SchemeObject* value);
         SchemeObject* getVariable(const string& name);
+        virtual void GCMarkPointed();
 
     private:
         Environment* m_parent;

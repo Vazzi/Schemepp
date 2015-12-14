@@ -19,6 +19,7 @@ class SchemeObject {
         virtual void GCMark();
         virtual void GCUnMark();
         virtual bool isGCMarked() const;
+        virtual void GCMarkPointed() {}; // Only for inheriting objects that has some pointers to other objects
 
     protected:
         bool m_isGCMarked;
