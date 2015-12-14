@@ -11,12 +11,14 @@
 #include "GarbageCollector.hpp"
 #include <algorithm>
 
+#define GC_SIZE_LIMIT_DEFAULT 1024*1024
+
 VirtualMachine::VirtualMachine() {
     m_currFrame.codeObject = 0;
     m_currFrame.pc = 0;
     m_currFrame.env = this->createGlobalEnvironment();
 
-    gc_sizeLimit = 32768;
+    gc_sizeLimit = GC_SIZE_LIMIT_DEFAULT;
     TheGarbageCollector::Instance()->registerVM(this);
 }
 

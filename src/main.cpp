@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
         VirtualMachine* vm = new VirtualMachine();
         vm->setInputFile(inFile);
         vm->setOutputFile(outFile);
+        vm->gc_sizeLimit = 1024 * 1024;
         vm->run(code);
         delete vm;
     } catch (VirtualMachineError& err) {
