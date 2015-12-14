@@ -40,7 +40,10 @@ void SchemeObject::operator delete(void* pointer) {
 }
 
 void SchemeObject::GCMark() {
-    m_isGCMarked = true;
+    if (!m_isGCMarked) {
+        m_isGCMarked = true;
+        GCMarkPointed();
+    }
 }
 
 void SchemeObject::GCUnMark() {
