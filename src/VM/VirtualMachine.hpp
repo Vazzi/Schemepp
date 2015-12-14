@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cstdio>
 
 class SchemeCodeObject;
 class SchemeObject;
@@ -12,6 +13,7 @@ struct Instruction;
 
 using std::vector;
 using std::string;
+using std::size_t;
 
 struct ExecutionFrame {
     SchemeCodeObject* codeObject;
@@ -30,6 +32,8 @@ class VirtualMachine {
         void setOutputFile(FILE* file);
 
         void GCMarkRoots();
+
+        size_t gc_sizeLimit;
     private:
         vector<ExecutionFrame> m_frameStack;
         vector<SchemeObject*> m_valuesStack; // Can not be stack because we need to iterate (Mark for GC)

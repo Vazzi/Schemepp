@@ -9,7 +9,6 @@
 #include "BuiltIn/BuiltInFunction.hpp"
 #include "VirtualMachineError.hpp"
 #include "GarbageCollector.hpp"
-#include <cstdio>
 #include <algorithm>
 
 VirtualMachine::VirtualMachine() {
@@ -17,6 +16,7 @@ VirtualMachine::VirtualMachine() {
     m_currFrame.pc = 0;
     m_currFrame.env = this->createGlobalEnvironment();
 
+    gc_sizeLimit = 32768;
     TheGarbageCollector::Instance()->registerVM(this);
 }
 
@@ -42,7 +42,7 @@ void VirtualMachine::run(SchemeCodeObject* codeObject) {
             break; // Last instruction, we are done
         }
 
-        TheGarbageCollector::Instance()->runClean(32768);
+        TheGarbageCollector::Instance()->runClean(gc_sizeLimit);
 
         // Evaluate instruction
         this->evalInstruction(instr);

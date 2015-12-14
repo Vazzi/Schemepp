@@ -27,8 +27,8 @@ void GarbageCollector::releaseObject(void* pointer) {
     ::operator delete(pointer);
 }
 
-void GarbageCollector::runClean(size_t size) {
-    if (m_totalAllocSize < size) {
+void GarbageCollector::runClean(size_t sizeLimit) {
+    if (m_totalAllocSize < sizeLimit) {
         return;
     }
 

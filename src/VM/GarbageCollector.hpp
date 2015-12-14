@@ -24,7 +24,7 @@ class GarbageCollector {
 
         void* allocateObject(size_t size);
         void releaseObject(void* pointer);
-        void runClean(size_t size);
+        void runClean(size_t sizeLimit);
         void registerVM(VirtualMachine* vm);
 
     private:
