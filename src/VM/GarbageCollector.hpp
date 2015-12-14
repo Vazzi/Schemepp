@@ -1,7 +1,16 @@
 #ifndef __GARBAGE_COLLECTOR_HPP__
 #define __GARBAGE_COLLECTOR_HPP__
 
+#include <utility>
+#include <list>
+
 class SchemeObject;
+
+using std::pair;
+using std::list;
+using std::size_t;
+
+typedef pair<SchemeObject*, size_t> InMemObject;
 
 class GarbageCollector {
     public:
@@ -12,6 +21,8 @@ class GarbageCollector {
             return s_instance;
         }
 
+        void* allocateObject(size_t size);
+        void releaseObject(void* pointer);
         void runClean();
         void registerObject(SchemeObject* object);
 
@@ -21,6 +32,8 @@ class GarbageCollector {
         GarbageCollector();
         ~GarbageCollector();
 
+        list<InMemObject> m_objects;
+        size_t m_totalAllocSize;
 };
 
 #endif /* ifndef __GARBAGE_COLLECTOR_HPP__ */
