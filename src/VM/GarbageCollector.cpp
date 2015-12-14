@@ -30,6 +30,19 @@ void GarbageCollector::runClean(size_t size) {
     if (m_totalAllocSize < size) {
         return;
     }
-    // TODO: Implement
+
+    list<InMemObject>::iterator it = m_objects.begin();
+    while (it != m_objects.end()) {
+        SchemeObject* object = it->first;
+        size_t objSize = it->second;
+        if (object->isGCMarked()) {
+            object->GCUnMark();
+            it++;
+        } else {
+            it = m_objects.erase(it);
+            delete object;
+            m_totalAllocSize -= objSize;
+        }
+    }
 }
 
