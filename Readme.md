@@ -1,17 +1,17 @@
 # Schemepp
 An implementation of Scheme in C++.
 
-Schemepp is a bytecode interpreter and Virtual machine for Scheme language. 
+Schemepp is a bytecode interpreter and a Virtual machine for Scheme language. 
 
-I used a [Bob Scheme](https://github.com/eliben/bobscheme) compiler to create bytecode files. Schemepp can read only .bobc files.
+I used the [Bob Scheme](https://github.com/eliben/bobscheme) compiler to create bytecode files. Schemepp can read only .bobc files.
 
 ## File structure
 
 * bin ... binnary of Schemepp (created by cmake)
 * scheme
-* / problem.scm ... an example in Scheme
-* / problem.bob ... compiled file of the example
-* / input.dat ... input data for example program in Scheme
+  * / problem.scm ... an example in Scheme
+  * / problem.bob ... compiled file of the example
+  * / input.dat ... input data for example program in Scheme
 * src ... source code of Schemepp
 * CMakeLists.txt ... specification for cmake
 * Readme.md ... readme
@@ -23,14 +23,14 @@ I used a [Bob Scheme](https://github.com/eliben/bobscheme) compiler to create by
 
 Executable file: bin/Schemepp
 
-## How to run bytecode in VM
+## How to run a bytecode in VM
 
 ```sh
 $ ./Schemepp <bytecode.bobc> <input_file> -i <output_file>
 ```
 
-* `bytecode.bobc`   bytecode of scheme program
-* `input_file`  is optional and is used for Scheme program to read from
-* `output_file`  is optional and is used for output. If not specified than the console output is used.
+* `bytecode.bobc`   bytecode of a scheme program
+* `input_file`  is optional
+* `output_file`  is optional. If not specified than the console output is used.
 
 
