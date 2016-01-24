@@ -9,9 +9,6 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Bytecode
-*.bobc
-
 # Precompiled Headers
 *.gch
 *.pch
