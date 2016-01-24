@@ -1,76 +1,36 @@
 # Schemepp
-Implementace Scheme v C++.
+An implementation of Scheme in C++.
 
-* Stránský Vojtěch(stranvo1)
-* Vlasák Jakub (vlasaj10)
+Schemepp is a bytecode interpreter and Virtual machine for Scheme language. 
 
-Interpretujeme bytecode Scheme jazyka vytvořeného pomocí Bob compileru.
+I used a [Bob Scheme](https://github.com/eliben/bobscheme) compiler to create bytecode files. Schemepp can read only .bobc files.
 
-## Poznámka
+## File structure
 
-Tento compiler neumí pracovat s řetězci a tak jsme zvolili program, jenž řetězce nepoužívá. Zároveň nemůžeme díky tomu implementovat klasickou metodu práce se soubory a tak jsme zvolili přístup takový, že při spuštění VM specifikujeme vstupní a výstupní soubor (oba jako volitelné parametry) a tyto soubory následně program používá (funkce: read, fileNextLine, write a newline). Pokud není specifikovaný vstupní soubor a program i tak zavolá některou ze čtecích funkcí, vrátí se error. Pokud není specifikován výstupní soubor je výstup zobrazen v konzoli.
-
-## Struktura
-
-* compiler ... kompilátor Scheme
-* bin ... zkompilovaný Schemepp (vytvoří se po kompilaci)
-* scheme ... program v jazyce Scheme
-    * / compile.py ... script jenž spustí kompilaci vybraného souboru
-    * / problem.scm ... implementovaný problém v Scheme
-    * / input.dat ... vstupní data pro daný problém
-* src ... zdrojové kódy Schemepp
-* CMakeLists.txt ... specifikace pro cmake
+* bin ... binnary of Schemepp (created by cmake)
+* scheme
+* / problem.scm ... an example in Scheme
+* / problem.bob ... compiled file of the example
+* / input.dat ... input data for example program in Scheme
+* src ... source code of Schemepp
+* CMakeLists.txt ... specification for cmake
 * Readme.md ... readme
-* runProgram.sh ... linux skript jenž všechno spustí a udělá za nás
 
-
-### runProgram.sh
-
-Pomocí tohoto scriptu se provede kompilace Schemepp a zkompiluje se problem.scm. Následně se spustí VM s daným problémem.
-
-Provedou se tedy všechny potřebné kroky pro ukázku, že program správně běží.
-
-## Kompilace Schemepp
-
-Pro kompilaci Schemepp používáme program cmake.
+## How to compile Schemepp
 
 1. cmake .
 2. make
 
-Spustitelný soubor: bin/Schemepp
+Executable file: bin/Schemepp
 
-## Spuštění programu ve Schemepp
-
-Ve složce bin:
+## How to run bytecode in VM
 
 ```sh
-$ ./Schemepp <bytecode.bobc> <vystupni_soubor> -i <vstupni_soubor>
+$ ./Schemepp <bytecode.bobc> <input_file> -i <output_file>
 ```
 
-<vstupni_soubor> a <vystupni_soubor> ... volitelné parametry
+* `bytecode.bobc`   bytecode of scheme program
+* `input_file`  is optional and is used for Scheme program to read from
+* `output_file`  is optional and is used for output. If not specified than the console output is used.
 
-## Kompilace programu do bytecode
-
-Ve složce scheme:
-
-```sh
-$ python3 compile.py problem.scm
-```
-
-Vytvoří .bobc soubor jenž zpracuje VM
-
-## Spuštění příkladu
-
-Lze provést spuštěním skriptu runProgram.sh
-
-```sh
-$ sh runProgram.sh
-```
-
-nebo manuálně:
-
-1. Vygenerovat .bobc soubor pomocí kompilátoru (viz předchozí bod).
-2. Zkopírovat vygenerovaný problem.bobc a input.dat soubor do složky bin
-3. Spustit: Schemepp problem.bobc -i input.dat
-4. VM vypíše do konzole výsledek
 
